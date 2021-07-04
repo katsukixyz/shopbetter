@@ -7,7 +7,7 @@ type CompareItem = {
   name: string;
 };
 
-const CompareCard: React.FC<{
+const Card: React.FC<{
   item: CompareItem;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({item, setModalVisible}) => {
@@ -62,4 +62,4 @@ const CompareCard: React.FC<{
   );
 };
 
-export default CompareCard;
+export default Card;

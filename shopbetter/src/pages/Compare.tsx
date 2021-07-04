@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, Modal} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
-import CompareCard from '../components/Compare/Card/CompareCard';
+import Card from '../components/Compare/Card/CompareCard';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
 import AddButton from '../components/Compare/AddButton/AddButton';
@@ -78,7 +78,7 @@ const Compare: React.FC = () => {
         contentContainerStyle={{paddingBottom: 50}}
         data={testData}
         renderItem={e => (
-          <CompareCard item={e.item} setModalVisible={setModalVisible} />
+          <Card item={e.item} setModalVisible={setModalVisible} />
         )}
         keyExtractor={item => item.name}
       />
