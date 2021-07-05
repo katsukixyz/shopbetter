@@ -4,6 +4,7 @@ import DraggableFlatList, {
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import SwipeableItem from 'react-native-swipeable-item';
 import CheckBox from '@react-native-community/checkbox';
 import Separator from '../Separator/Separator';
 
@@ -65,21 +66,21 @@ const Card: React.FC = () => {
           fontSize: 28,
           paddingBottom: 8,
         }}>
-        Store Name
+        List Name
       </Text>
       <DraggableFlatList
         style={{
           marginBottom: 20,
         }}
         data={testData}
-        // debug
         renderItem={e => (
-          <View>
+          <SwipeableItem item={e}>
+            <Separator />
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <CheckBox
                 boxType="square"
                 style={{height: 16, marginLeft: 5}}
-                animationDuration={0.25}
+                animationDuration={0.1}
                 lineWidth={1.5}
                 disabled={false}
                 value={false}
@@ -89,11 +90,9 @@ const Card: React.FC = () => {
                 {e.item.name}
               </Text>
             </View>
-            <Separator />
-          </View>
+          </SwipeableItem>
         )}
         keyExtractor={item => item.name}
-        // keyExtractor={(item, index) => `draggable-item-${item.name}`}
       />
     </View>
   );

@@ -28,7 +28,6 @@ const App = () => {
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <Tab.Navigator
           tabBarOptions={{
-            // activeTintColor: '#211d58',
             activeTintColor: 'black',
             showLabel: false,
           }}>

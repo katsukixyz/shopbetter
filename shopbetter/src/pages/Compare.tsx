@@ -7,39 +7,31 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
 import AddButton from '../components/Compare/AddButton/AddButton';
 import Filter from '../components/Compare/Filter/Filter';
+import SQLite, {openDatabase} from 'react-native-sqlite-storage';
+import {createTable, getTableData} from '../services/sqliteTransactions';
+
+const comparisonDB = openDatabase(
+  {
+    name: 'comparison_db.db',
+    location: 'Documents',
+  },
+  () => console.log('Opened comparison db.'),
+  () => console.log('Error occurred.'),
+);
 
 const Compare: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [comparisonData, setComparisonData] = useState<any>();
 
-  const testData = [
-    {
-      name: 'Potatoes',
-    },
-    {
-      name: 'Tomatoes',
-    },
-    {
-      name: 'Eggs',
-    },
-    {
-      name: 'Egg',
-    },
-    {
-      name: 'Eg',
-    },
-    {
-      name: 'Eggs!',
-    },
-    {
-      name: 'Egg!!!!',
-    },
-    {
-      name: 'Egjoeeojoeo',
-    },
-    {
-      name: 'Egs!',
-    },
-  ];
+  useEffect(() => {
+    createTable(comparisonDB, 'comparison').then(() => {
+      getTableData(comparisonDB, 'comparison').then(data => {
+        console.log(data);
+        setComparisonData(data);
+      });
+    });
+  }, []);
+
   return (
     <SafeAreaView
       style={{
@@ -76,7 +68,7 @@ const Compare: React.FC = () => {
       </Modal> */}
       <FlatList
         contentContainerStyle={{paddingBottom: 50}}
-        data={testData}
+        data={comparisonData}
         renderItem={e => (
           <Card item={e.item} setModalVisible={setModalVisible} />
         )}
