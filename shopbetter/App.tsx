@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {
@@ -16,11 +16,47 @@ import List from './src/pages/List';
 import Compare from './src/pages/Compare';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  createTable,
+  getTableData,
+  deleteTable,
+} from './src/services/initTransactions';
+import {openDatabase} from 'react-native-sqlite-storage';
 
 const Tab = createBottomTabNavigator();
 
+const comparisonDB = openDatabase(
+  {
+    name: 'comparison_db.db',
+    location: 'Documents',
+  },
+  () => console.log('Opened comparison db.'),
+  () => console.log('Error occurred.'),
+);
+
+const shoppingDB = openDatabase(
+  {
+    name: 'shopping_db.db',
+    location: 'Documents',
+  },
+  () => console.log('Opened shopping db.'),
+  () => console.log('Error occurred'),
+);
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [comparisonData, setComparisonData] = useState<any>();
+  const [shoppingData, setShoppingData] = useState<any>();
+
+  useEffect(() => {
+    createTable(comparisonDB, 'comparison');
+    createTable(shoppingDB, 'shopping');
+    getTableData(comparisonDB, 'comparison').then(data => {
+      setComparisonData(data);
+    });
+    getTableData(shoppingDB, 'shopping').then(data => {
+      setShoppingData(data);
+    });
+  }, []);
 
   return (
     <NavigationContainer>
@@ -33,7 +69,6 @@ const App = () => {
           }}>
           <Tab.Screen
             name="Compare"
-            component={Compare}
             options={{
               tabBarIcon: ({color, size}) => (
                 <MaterialCommunityIcons
@@ -42,11 +77,17 @@ const App = () => {
                   color={color}
                 />
               ),
-            }}
-          />
+            }}>
+            {props => (
+              <Compare
+                {...props}
+                comparisonData={comparisonData}
+                setComparisonData={setComparisonData}
+              />
+            )}
+          </Tab.Screen>
           <Tab.Screen
             name="List"
-            component={List}
             options={{
               tabBarIcon: ({color, size}) => (
                 <MaterialCommunityIcons
@@ -55,8 +96,16 @@ const App = () => {
                   color={color}
                 />
               ),
-            }}
-          />
+            }}>
+            {props => (
+              <List
+                {...props}
+                shoppingDB={shoppingDB}
+                shoppingData={shoppingData}
+                setShoppingData={setShoppingData}
+              />
+            )}
+          </Tab.Screen>
         </Tab.Navigator>
       </SafeAreaProvider>
     </NavigationContainer>

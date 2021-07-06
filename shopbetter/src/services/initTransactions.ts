@@ -1,22 +1,36 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 
+//! cannot autoincrement since existing devices already have db with no autoincrement, and as such, not all devices will have an autoincrementing database
+
+//* SHOULD ONLY BE USED IN DEV
+const deleteTable = (
+  db: SQLiteDatabase,
+  tableName: 'shopping' | 'comparison',
+) => {
+  const query = `DROP TABLE IF EXISTS ${tableName}`;
+  // const query = `PRAGMA table_info(${tableName});`;
+  db.transaction(tx => {
+    tx.executeSql(query, [], (tx, result) =>
+      console.log(tableName, result.rows.raw()),
+    );
+  });
+};
+
 const createTable = (
   db: SQLiteDatabase,
   tableName: 'shopping' | 'comparison',
 ) => {
-  //! AUTOINCREMENT? if flutter checks last record and +1 then yes
   let query: string;
   switch (tableName) {
     case 'shopping':
       query = `CREATE TABLE IF NOT EXISTS ${tableName} (id INTEGER PRIMARY KEY, name TEXT, items TEXT)`;
+      break;
     case 'comparison':
       query = `CREATE TABLE IF NOT EXISTS ${tableName} (id INTEGER PRIMARY KEY, name TEXT, store TEXT, price DOUBLE, quantity DOUBLE)`;
+      break;
   }
-  return new Promise(resolve => {
-    db.transaction(tx => {
-      tx.executeSql(query);
-      resolve();
-    });
+  db.transaction(tx => {
+    tx.executeSql(query, []);
   });
 };
 
@@ -30,4 +44,4 @@ const getTableData = (db: SQLiteDatabase, tableName: string) => {
   });
 };
 
-export {createTable, getTableData};
+export {deleteTable, createTable, getTableData};

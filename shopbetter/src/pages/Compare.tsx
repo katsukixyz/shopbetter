@@ -8,30 +8,18 @@ import {Picker} from '@react-native-picker/picker';
 import AddButton from '../components/Compare/AddButton/AddButton';
 import Filter from '../components/Compare/Filter/Filter';
 import SQLite, {openDatabase} from 'react-native-sqlite-storage';
-import {createTable, getTableData} from '../services/sqliteTransactions';
+import {createTable, getTableData} from '../services/initTransactions';
+import {addList} from '../services/list';
 
-const comparisonDB = openDatabase(
-  {
-    name: 'comparison_db.db',
-    location: 'Documents',
-  },
-  () => console.log('Opened comparison db.'),
-  () => console.log('Error occurred.'),
-);
+interface CompareProps {
+  comparisonData: any;
+  setComparisonData: React.Dispatch<React.SetStateAction<any>>;
+}
 
-const Compare: React.FC = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [comparisonData, setComparisonData] = useState<any>();
-
-  useEffect(() => {
-    createTable(comparisonDB, 'comparison').then(() => {
-      getTableData(comparisonDB, 'comparison').then(data => {
-        console.log(data);
-        setComparisonData(data);
-      });
-    });
-  }, []);
-
+const Compare: React.FC<CompareProps> = ({
+  comparisonData,
+  setComparisonData,
+}) => {
   return (
     <SafeAreaView
       style={{
@@ -42,36 +30,10 @@ const Compare: React.FC = () => {
       }}>
       <PageHeader>Compare</PageHeader>
       <Filter />
-      {/* <Modal
-        presentationStyle="overFullScreen"
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <View
-        style={{
-          margin: 20,
-          backgroundColor: 'white',
-          borderRadius: 20,
-          padding: 35,
-          alignItems: 'center',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 4,
-          elevation: 5,
-        }}
-        >
-          <Text>Joe</Text>
-        </View>
-      </Modal> */}
       <FlatList
         contentContainerStyle={{paddingBottom: 50}}
         data={comparisonData}
-        renderItem={e => (
-          <Card item={e.item} setModalVisible={setModalVisible} />
-        )}
+        renderItem={e => <Card item={e.item} />}
         keyExtractor={item => item.name}
       />
       <AddButton />

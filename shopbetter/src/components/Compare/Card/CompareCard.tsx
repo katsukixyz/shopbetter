@@ -3,14 +3,15 @@ import {View, Text} from 'react-native';
 import {Swipeable, RectButton} from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
 
+interface CompareCardProps {
+  item: CompareItem;
+}
+
 type CompareItem = {
   name: string;
 };
 
-const Card: React.FC<{
-  item: CompareItem;
-  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({item, setModalVisible}) => {
+const Card: React.FC<CompareCardProps> = ({item}) => {
   const [selectedLanguage, setSelectedLanguage] = useState('joe');
 
   const renderRightActions = (progress: any, dragX: any) => {

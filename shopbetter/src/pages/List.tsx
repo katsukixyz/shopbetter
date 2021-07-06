@@ -1,33 +1,38 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {Alert, View, Text, Modal} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
 import PagerView from 'react-native-pager-view';
-import Card from '../components/List/Card/ListCard';
-import {openDatabase} from 'react-native-sqlite-storage';
+import Card, {ListObject} from '../components/List/Card/ListCard';
+import {openDatabase, SQLiteDatabase} from 'react-native-sqlite-storage';
 import ComposeButton from '../components/List/ComposeButton/ComposeButton';
-import {createTable, getTableData} from '../services/sqliteTransactions';
+import {
+  deleteTable,
+  createTable,
+  getTableData,
+} from '../services/initTransactions';
+import AddList from '../components/List/Modals/AddList';
+import {addList, editListName} from '../services/list';
+import EditListName from '../components/List/Modals/EditListName';
 
-const shoppingDB = openDatabase(
-  {
-    name: 'shopping_db.db',
-    location: 'Documents',
-  },
-  () => console.log('Opened shopping db.'),
-  () => console.log('Error occurred'),
-);
+interface ListProps {
+  shoppingDB: SQLiteDatabase;
+  shoppingData: any;
+  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+}
 
-const List: React.FC = () => {
-  const [shoppingData, setShoppingData] = useState<any>();
-
-  useEffect(() => {
-    createTable(shoppingDB, 'shopping').then(() => {
-      getTableData(shoppingDB, 'shopping').then(data => {
-        console.log(data);
-        setShoppingData(data);
-      });
-    });
-  }, []);
+const List: React.FC<ListProps> = ({
+  shoppingDB,
+  shoppingData,
+  setShoppingData,
+}) => {
+  const [currentList, setCurrentList] = useState<ListObject>({
+    id: 0,
+    name: '',
+    items: '[]',
+  });
+  const [editListNameModalVis, setEditListNameModalVis] = useState(false);
+  const [addListModalVis, setAddListModalVis] = useState(false);
 
   return (
     <SafeAreaView
@@ -42,14 +47,40 @@ const List: React.FC = () => {
         style={{flex: 1}}
         initialPage={0}
         pageMargin={20}
+        overdrag
+        onPageSelected={e =>
+          setCurrentList(shoppingData[e.nativeEvent.position])
+        }
         showPageIndicator>
-        {shoppingData
-          ? shoppingData.map((e: any, i: number) => {
-              return <Card key={i} />;
-            })
-          : null}
+        {shoppingData ? (
+          shoppingData.map((e: ListObject, i: number) => {
+            return (
+              <Card
+                key={e.id}
+                setEditListNameModalVis={setEditListNameModalVis}
+                {...e}
+              />
+            );
+          })
+        ) : (
+          <View></View>
+        )}
       </PagerView>
-      <ComposeButton />
+      <AddList
+        db={shoppingDB}
+        setShoppingData={setShoppingData}
+        addListModalVis={addListModalVis}
+        setAddListModalVis={setAddListModalVis}
+      />
+      <EditListName
+        db={shoppingDB}
+        currentList={currentList}
+        setShoppingData={setShoppingData}
+        editListNameModalVis={editListNameModalVis}
+        setEditListNameModalVis={setEditListNameModalVis}
+      />
+
+      <ComposeButton setAddListModalVis={setAddListModalVis} />
     </SafeAreaView>
   );
 };

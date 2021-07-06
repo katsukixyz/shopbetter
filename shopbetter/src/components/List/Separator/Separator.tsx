@@ -1,12 +1,19 @@
 import React from 'react';
 import {View} from 'react-native';
 
-const Separator: React.FC = () => {
+interface SeparatorProps {
+  style?: {
+    [key: string]: string | number;
+  };
+}
+
+const Separator: React.FC<SeparatorProps> = ({style}) => {
   return (
     <View
       style={{
-        borderBottomColor: '#c4c4c4',
-        borderBottomWidth: 1,
+        borderTopColor: '#c4c4c4',
+        borderTopWidth: 1,
+        ...style,
       }}
     />
   );

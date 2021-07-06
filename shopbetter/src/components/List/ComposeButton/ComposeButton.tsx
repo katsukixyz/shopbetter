@@ -2,17 +2,22 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ComposeButton: React.FC = () => {
+interface ComposeButton {
+  setAddListModalVis: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ComposeButton: React.FC<ComposeButton> = ({setAddListModalVis}) => {
   return (
     <TouchableOpacity
+      onPress={() => setAddListModalVis(true)}
       style={{
         width: 60,
         height: 60,
-        borderRadius: 30,
-        backgroundColor: 'black',
         position: 'absolute',
         bottom: 20,
         right: 20,
+        borderRadius: 30,
+        backgroundColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
       }}>
