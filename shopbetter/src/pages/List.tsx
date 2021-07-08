@@ -3,17 +3,14 @@ import {Alert, View, Text, Modal} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
 import PagerView from 'react-native-pager-view';
-import Card, {ListObject} from '../components/List/Card/ListCard';
-import {openDatabase, SQLiteDatabase} from 'react-native-sqlite-storage';
+import Card from '../components/List/Card/ListCard';
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import ComposeButton from '../components/List/ComposeButton/ComposeButton';
-import {
-  deleteTable,
-  createTable,
-  getTableData,
-} from '../services/initTransactions';
 import AddList from '../components/List/Modals/AddList';
 import {addList, editListName} from '../services/list';
 import EditListName from '../components/List/Modals/EditListName';
+import {ListPage} from '../types/listTypes';
+import AddListItem from '../components/List/Modals/AddListItem';
 
 interface ListProps {
   shoppingDB: SQLiteDatabase;
@@ -26,13 +23,10 @@ const List: React.FC<ListProps> = ({
   shoppingData,
   setShoppingData,
 }) => {
-  const [currentList, setCurrentList] = useState<ListObject>({
-    id: 0,
-    name: '',
-    items: '[]',
-  });
-  const [editListNameModalVis, setEditListNameModalVis] = useState(false);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [addListModalVis, setAddListModalVis] = useState(false);
+  const [editListNameModalVis, setEditListNameModalVis] = useState(false);
+  const [addItemModalVis, setAddItemModalVis] = useState(false);
 
   return (
     <SafeAreaView
@@ -43,29 +37,39 @@ const List: React.FC<ListProps> = ({
         paddingTop: 10,
       }}>
       <PageHeader>Lists</PageHeader>
-      <PagerView
-        style={{flex: 1}}
-        initialPage={0}
-        pageMargin={20}
-        overdrag
-        onPageSelected={e =>
-          setCurrentList(shoppingData[e.nativeEvent.position])
-        }
-        showPageIndicator>
-        {shoppingData ? (
-          shoppingData.map((e: ListObject, i: number) => {
-            return (
-              <Card
-                key={e.id}
-                setEditListNameModalVis={setEditListNameModalVis}
-                {...e}
-              />
-            );
-          })
+      {shoppingData ? (
+        shoppingData.length > 0 ? (
+          <PagerView
+            style={{flex: 1}}
+            initialPage={0}
+            pageMargin={20}
+            overdrag
+            onPageSelected={e => {
+              setCurrentPageIndex(e.nativeEvent.position);
+            }}
+            showPageIndicator>
+            {shoppingData.map((e: ListPage, i: number) => {
+              return (
+                <Card
+                  key={e.id}
+                  name={e.name}
+                  items={e.items}
+                  db={shoppingDB}
+                  currentPageIndex={currentPageIndex}
+                  shoppingData={shoppingData}
+                  setShoppingData={setShoppingData}
+                  setEditListNameModalVis={setEditListNameModalVis}
+                  setAddItemModalVis={setAddItemModalVis}
+                />
+              );
+            })}
+          </PagerView>
         ) : (
           <View></View>
-        )}
-      </PagerView>
+        )
+      ) : (
+        <View></View>
+      )}
       <AddList
         db={shoppingDB}
         setShoppingData={setShoppingData}
@@ -74,10 +78,17 @@ const List: React.FC<ListProps> = ({
       />
       <EditListName
         db={shoppingDB}
-        currentList={currentList}
+        currentList={shoppingData[currentPageIndex]}
         setShoppingData={setShoppingData}
         editListNameModalVis={editListNameModalVis}
         setEditListNameModalVis={setEditListNameModalVis}
+      />
+      <AddListItem
+        db={shoppingDB}
+        currentList={shoppingData[currentPageIndex]}
+        setShoppingData={setShoppingData}
+        addItemModalVis={addItemModalVis}
+        setAddItemModalVis={setAddItemModalVis}
       />
 
       <ComposeButton setAddListModalVis={setAddListModalVis} />

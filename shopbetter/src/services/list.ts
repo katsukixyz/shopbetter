@@ -1,15 +1,11 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {ListPage} from '../types/listTypes';
 
-type List = {
-  name: string;
-  items: string;
-};
-
-const addList = (db: SQLiteDatabase, values: List) => {
+const addList = (db: SQLiteDatabase, values: ListPage) => {
   return new Promise(resolve => {
     const maxQuery = 'SELECT MAX(id) FROM shopping';
     const addQuery = `INSERT INTO shopping (id, name, items) VALUES (?,?,?)`;
-    let count: string | number; // concat type error with differing types
+    let count: number;
     db.transaction(tx => {
       tx.executeSql(
         maxQuery,
@@ -21,7 +17,7 @@ const addList = (db: SQLiteDatabase, values: List) => {
           } else {
             count = 1;
           }
-          const params = [count].concat(Object.values(values));
+          const params = [count, values.name, values.items];
           tx.executeSql(
             addQuery,
             params,
@@ -55,12 +51,22 @@ const editListName = (db: SQLiteDatabase, id: number, name: string) => {
   });
 };
 
-const removeList = () => {};
-
-const addListItem = () => {};
+const updateListItem = (db: SQLiteDatabase, id: number, items: string) => {
+  return new Promise(resolve => {
+    const query = 'UPDATE shopping SET items = ? WHERE id = ?';
+    db.transaction(tx => {
+      tx.executeSql(
+        query,
+        [items, id],
+        (tx, result) => {
+          resolve();
+        },
+        err => console.log(err),
+      );
+    });
+  });
+};
 
 const removeListItem = () => {};
 
-const updateListItem = () => {};
-
-export {addList, editListName};
+export {addList, editListName, updateListItem};

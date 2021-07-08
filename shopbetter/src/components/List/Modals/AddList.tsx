@@ -26,6 +26,7 @@ const AddList: React.FC<AddListProps> = ({
   const onConfirm = () => {
     addList(db, {name: nameInput, items: JSON.stringify([])}).then(() => {
       getTableData(db, 'shopping').then(data => {
+        console.log('addList', data);
         setShoppingData(data);
         setAddListModalVis(false);
         setNameInput('');

@@ -4,12 +4,20 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Buttons: React.FC = () => {
+interface ButtonsProps {
+  setAddItemModalVis: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Buttons: React.FC<ButtonsProps> = ({setAddItemModalVis}) => {
   return (
     <View
       style={{
         paddingTop: 2,
         width: 70,
+        // height: 44,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // alignItems: 'center',
       }}>
       <TouchableOpacity
         style={{
@@ -17,10 +25,10 @@ const Buttons: React.FC = () => {
           height: 30,
           borderRadius: 15,
           backgroundColor: 'black',
-          position: 'absolute',
           alignItems: 'center',
           justifyContent: 'center',
-        }}>
+        }}
+        onPress={() => console.log('joe')}>
         <Ionicons name="trash-outline" color="white" size={18} />
       </TouchableOpacity>
       <TouchableOpacity
@@ -29,11 +37,10 @@ const Buttons: React.FC = () => {
           height: 30,
           borderRadius: 15,
           backgroundColor: 'black',
-          position: 'absolute',
           alignItems: 'center',
           justifyContent: 'center',
-          left: 40,
-        }}>
+        }}
+        onPress={() => setAddItemModalVis(true)}>
         <MaterialCommunityIcons name="plus" color="white" size={18} />
       </TouchableOpacity>
     </View>

@@ -1,19 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import {RefreshControl} from 'react-native';
-import {View, Text, TextInput} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {addList} from '../../../services/list';
+import {TextInput} from 'react-native';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
-import Separator from '../Separator/Separator';
 import AlertModal from '../../AlertModal/AlertModal';
 import {editListName} from '../../../services/list';
 import {getTableData} from '../../../services/initTransactions';
-import {ListObject} from '../Card/ListCard';
+import {ListPage} from '../../../types/listTypes';
 
 interface EditListNameProps {
   db: SQLiteDatabase;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
-  currentList: ListObject;
+  currentList: ListPage;
   editListNameModalVis: boolean;
   setEditListNameModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -25,24 +21,26 @@ const EditListName: React.FC<EditListNameProps> = ({
   editListNameModalVis,
   setEditListNameModalVis,
 }) => {
-  useEffect(() => {
-    setNameInput(currentList.name);
-  }, [currentList]);
-
   const [nameInput, setNameInput] = useState('');
 
+  useEffect(() => {
+    if (currentList) {
+      setNameInput(currentList.name);
+    }
+  }, [currentList]);
+
   const onConfirm = () => {
-    editListName(db, currentList.id!, nameInput).then(() => {
-      getTableData(db, 'shopping').then(data => {
-        setShoppingData(data);
-        setEditListNameModalVis(false);
-        setNameInput('');
+    if (nameInput !== currentList.name) {
+      editListName(db, currentList.id!, nameInput).then(() => {
+        getTableData(db, 'shopping').then(data => {
+          setShoppingData(data);
+          setEditListNameModalVis(false);
+        });
       });
-    });
+    }
   };
 
   const onCancel = () => {
-    setNameInput('');
     setEditListNameModalVis(false);
   };
 
