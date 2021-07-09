@@ -8,7 +8,6 @@ import {
   Text,
   useColorScheme,
   View,
-  LogBox,
 } from 'react-native';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -49,7 +48,6 @@ const App = () => {
   const [shoppingData, setShoppingData] = useState<any>([]);
 
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     // deleteTable(comparisonDB, 'comparison');
     // deleteTable(shoppingDB, 'shopping');
     createTable(comparisonDB, 'comparison');

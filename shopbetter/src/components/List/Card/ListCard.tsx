@@ -1,22 +1,19 @@
-import React, {useCallback, useState} from 'react';
-import {View, Text, VirtualizedList} from 'react-native';
+import React, {useCallback} from 'react';
+import {View, Text} from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import {
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from 'react-native-gesture-handler';
-import SwipeableItem from 'react-native-swipeable-item';
+import Animated from 'react-native-reanimated';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import SwipeableItem, {UnderlayParams} from 'react-native-swipeable-item';
 import CheckBox from '@react-native-community/checkbox';
 import Separator from '../Separator/Separator';
 import Buttons from './Buttons/Buttons';
 import {ListPage, ListItem} from '../../../types/listTypes';
 import {updateListItem} from '../../../services/list';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
-import {getTableData} from '../../../services/initTransactions';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface ListCardProps extends ListPage {
   db: SQLiteDatabase;
@@ -38,11 +35,56 @@ const Card: React.FC<ListCardProps> = ({
   setAddItemModalVis,
 }) => {
   const currentList = shoppingData[currentPageIndex];
+  const itemRefs = new Map();
+
+  const renderUnderlayLeft = ({
+    item,
+    percentOpen,
+  }: UnderlayParams<ListItem>) => (
+    <Animated.View
+      style={{
+        flex: 1,
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+        alignItems: 'center',
+        opacity: percentOpen,
+        // Fade in on open
+      }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: 60,
+          justifyContent: 'space-between',
+        }}>
+        <Ionicons name="create-outline" color="#007aff" size={22} />
+        <Ionicons name="trash-outline" color="#ff3b30" size={22} />
+      </View>
+    </Animated.View>
+  );
 
   const renderItem = useCallback(
     ({item, index, drag}: RenderItemParams<ListItem>) => {
       return (
-        <SwipeableItem item={item}>
+        <SwipeableItem
+          key={index}
+          item={item}
+          ref={ref => {
+            if (ref && !itemRefs.get(index)) {
+              itemRefs.set(index, ref);
+            }
+          }}
+          onChange={({open}) => {
+            if (open) {
+              [...itemRefs.entries()].forEach(([key, ref]) => {
+                if (key !== index && ref) {
+                  ref.close();
+                }
+              });
+            }
+          }}
+          overSwipe={10}
+          snapPointsLeft={[30]}
+          renderUnderlayLeft={renderUnderlayLeft}>
           <TouchableOpacity onLongPress={drag}>
             <View
               style={{
@@ -52,9 +94,8 @@ const Card: React.FC<ListCardProps> = ({
               <CheckBox
                 boxType="square"
                 style={{height: 16, marginLeft: 5}}
-                animationDuration={0.1}
+                animationDuration={0.05}
                 lineWidth={1.5}
-                disabled={false}
                 value={item.checkVal}
                 onValueChange={newValue => {
                   const changedItems = [...JSON.parse(currentList.items)];
@@ -62,15 +103,17 @@ const Card: React.FC<ListCardProps> = ({
                     checkVal: newValue,
                     name: item.name,
                   };
+                  const changedShoppingData = [...shoppingData];
+                  changedShoppingData[currentPageIndex] = {
+                    ...currentList,
+                    items: JSON.stringify(changedItems),
+                  };
+                  setShoppingData(changedShoppingData);
                   updateListItem(
                     db,
                     currentList.id!,
                     JSON.stringify(changedItems),
-                  ).then(() => {
-                    getTableData(db, 'shopping').then(data => {
-                      setShoppingData(data);
-                    });
-                  });
+                  );
                 }}
               />
               <Text

@@ -23,7 +23,7 @@ const List: React.FC<ListProps> = ({
   shoppingData,
   setShoppingData,
 }) => {
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0); //used only for modals
   const [addListModalVis, setAddListModalVis] = useState(false);
   const [editListNameModalVis, setEditListNameModalVis] = useState(false);
   const [addItemModalVis, setAddItemModalVis] = useState(false);
@@ -45,6 +45,7 @@ const List: React.FC<ListProps> = ({
             pageMargin={20}
             overdrag
             onPageSelected={e => {
+              console.log('pageSelect', e.nativeEvent.position);
               setCurrentPageIndex(e.nativeEvent.position);
             }}
             showPageIndicator>
@@ -55,7 +56,7 @@ const List: React.FC<ListProps> = ({
                   name={e.name}
                   items={e.items}
                   db={shoppingDB}
-                  currentPageIndex={currentPageIndex}
+                  currentPageIndex={i}
                   shoppingData={shoppingData}
                   setShoppingData={setShoppingData}
                   setEditListNameModalVis={setEditListNameModalVis}
