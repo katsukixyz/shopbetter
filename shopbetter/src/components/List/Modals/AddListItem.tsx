@@ -30,6 +30,8 @@ const AddListItem: React.FC<AddListItemProps> = ({
       checkVal: false,
     });
 
+    console.log('addListItem', items);
+
     updateListItem(db, currentList.id!, JSON.stringify(items)).then(() => {
       getTableData(db, 'shopping').then(data => {
         setShoppingData(data);
@@ -40,8 +42,8 @@ const AddListItem: React.FC<AddListItemProps> = ({
   };
 
   const onCancel = () => {
-    setItemNameInput('');
     setAddItemModalVis(false);
+    setItemNameInput('');
   };
 
   return (

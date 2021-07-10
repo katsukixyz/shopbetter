@@ -1,16 +1,26 @@
-import React, {useState, useEffect} from 'react';
-import {Alert, View, Text, Modal} from 'react-native';
+import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
+import {
+  Alert,
+  View,
+  Text,
+  Modal,
+  VirtualizedList,
+  ListRenderItem,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
 import PagerView from 'react-native-pager-view';
-import Card from '../components/List/Card/ListCard';
+import ListCard from '../components/List/Card/ListCard';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import ComposeButton from '../components/List/ComposeButton/ComposeButton';
 import AddList from '../components/List/Modals/AddList';
 import {addList, editListName} from '../services/list';
 import EditListName from '../components/List/Modals/EditListName';
-import {ListPage} from '../types/listTypes';
+import {ListPage, ListItem} from '../types/listTypes';
 import AddListItem from '../components/List/Modals/AddListItem';
+import RemoveList from '../components/List/Modals/RemoveList';
+import {FlatList} from 'react-native-gesture-handler';
+import {RenderItemParams} from 'react-native-draggable-flatlist';
 
 interface ListProps {
   shoppingDB: SQLiteDatabase;
@@ -23,10 +33,20 @@ const List: React.FC<ListProps> = ({
   shoppingData,
   setShoppingData,
 }) => {
-  const [currentPageIndex, setCurrentPageIndex] = useState(0); //used only for modals
+  // const [currentPageIndex, setCurrentPageIndex] = useState(0); //used only for modals
   const [addListModalVis, setAddListModalVis] = useState(false);
-  const [editListNameModalVis, setEditListNameModalVis] = useState(false);
-  const [addItemModalVis, setAddItemModalVis] = useState(false);
+
+  const pagerView = useRef<PagerView>();
+
+  // useMemo(() => {
+  //   console.log('changed to ', currentPageIndex);
+  //   pagerView.current?.setPageWithoutAnimation(currentPageIndex);
+  // }, [shoppingData, currentPageIndex]);
+
+  // const onViewableItemsChanged = useCallback(({viewableItems, changed}) => {
+  //   console.log('Visible items are', viewableItems);
+  //   console.log('Changed in this iteration', changed);
+  // }, []);
 
   return (
     <SafeAreaView
@@ -39,32 +59,43 @@ const List: React.FC<ListProps> = ({
       <PageHeader>Lists</PageHeader>
       {shoppingData ? (
         shoppingData.length > 0 ? (
-          <PagerView
+          <FlatList
             style={{flex: 1}}
-            initialPage={0}
-            pageMargin={20}
-            overdrag
-            onPageSelected={e => {
-              console.log('pageSelect', e.nativeEvent.position);
-              setCurrentPageIndex(e.nativeEvent.position);
-            }}
-            showPageIndicator>
-            {shoppingData.map((e: ListPage, i: number) => {
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={shoppingData}
+            snapToInterval={370}
+            getItemLayout={(data, index) => ({
+              length: 370,
+              offset: 370 * index,
+              index,
+            })}
+            decelerationRate="fast"
+            ItemSeparatorComponent={() => <View style={{margin: 10}} />}
+            renderItem={({item, index}: {item: ListPage; index: number}) => {
               return (
-                <Card
-                  key={e.id}
-                  name={e.name}
-                  items={e.items}
+                <ListCard
+                  key={item.id}
+                  pageIndex={index}
+                  name={item.name}
+                  items={item.items}
                   db={shoppingDB}
-                  currentPageIndex={i}
+                  // currentPageIndex={index}
                   shoppingData={shoppingData}
                   setShoppingData={setShoppingData}
-                  setEditListNameModalVis={setEditListNameModalVis}
-                  setAddItemModalVis={setAddItemModalVis}
+                  // removeListModalVis={removeListModalVis}
+                  // setRemoveListModalVis={setRemoveListModalVis}
+                  // editListNameModalVis={editListNameModalVis}
+                  // setEditListNameModalVis={setEditListNameModalVis}
+                  // addItemModalVis={addItemModalVis}
+                  // setAddItemModalVis={setAddItemModalVis}
                 />
               );
-            })}
-          </PagerView>
+            }}
+            // keyExtractor={(item, index) => {
+            //   return item.id;
+            // }}
+          />
         ) : (
           <View></View>
         )
@@ -77,20 +108,6 @@ const List: React.FC<ListProps> = ({
         addListModalVis={addListModalVis}
         setAddListModalVis={setAddListModalVis}
       />
-      <EditListName
-        db={shoppingDB}
-        currentList={shoppingData[currentPageIndex]}
-        setShoppingData={setShoppingData}
-        editListNameModalVis={editListNameModalVis}
-        setEditListNameModalVis={setEditListNameModalVis}
-      />
-      <AddListItem
-        db={shoppingDB}
-        currentList={shoppingData[currentPageIndex]}
-        setShoppingData={setShoppingData}
-        addItemModalVis={addItemModalVis}
-        setAddItemModalVis={setAddItemModalVis}
-      />
 
       <ComposeButton setAddListModalVis={setAddListModalVis} />
     </SafeAreaView>
@@ -100,3 +117,30 @@ const List: React.FC<ListProps> = ({
 //! https://github.com/callstack/react-native-pager-view/pull/379
 
 export default List;
+
+// <PagerView ref={ref => (pagerView.current = ref!)}
+//   style={{flex: 1}}
+//   initialPage={0}
+//   pageMargin={20}
+//   overdrag
+//   onPageSelected={e => {
+//     setCurrentPageIndex(e.nativeEvent.position);
+//   }}
+//   showPageIndicator>
+//   {shoppingData.map((e: ListPage, i: number) => {
+//     return (
+//       <Card
+//         key={e.id}
+//         name={e.name}
+//         items={e.items}
+//         db={shoppingDB}
+//         currentPageIndex={i}
+//         shoppingData={shoppingData}
+//         setShoppingData={setShoppingData}
+//         setRemoveListModalVis={setRemoveListModalVis}
+//         setEditListNameModalVis={setEditListNameModalVis}
+//         setAddItemModalVis={setAddItemModalVis}
+//       />
+//     );
+//   })}
+// </PagerView>

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
@@ -14,135 +14,39 @@ import {updateListItem} from '../../../services/list';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import EditListName from '../Modals/EditListName';
+import AddListItem from '../Modals/AddListItem';
+import RemoveList from '../Modals/RemoveList';
+import {getTableData} from '../../../services/initTransactions';
+import ListCardItem from './ListCardItem';
 
 interface ListCardProps extends ListPage {
   db: SQLiteDatabase;
-  currentPageIndex: number;
+  pageIndex: number;
   shoppingData: any;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
-  setEditListNameModalVis: React.Dispatch<React.SetStateAction<boolean>>;
-  setAddItemModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Card: React.FC<ListCardProps> = ({
+const ListCard: React.FC<ListCardProps> = ({
   db,
   name,
   items,
-  currentPageIndex,
+  pageIndex,
   shoppingData,
   setShoppingData,
-  setEditListNameModalVis,
-  setAddItemModalVis,
 }) => {
-  const currentList = shoppingData[currentPageIndex];
-  const itemRefs = new Map();
+  const [removeListModalVis, setRemoveListModalVis] = useState(false);
+  const [editListNameModalVis, setEditListNameModalVis] = useState(false);
+  const [addItemModalVis, setAddItemModalVis] = useState(false);
 
-  const renderUnderlayLeft = ({
-    item,
-    percentOpen,
-  }: UnderlayParams<ListItem>) => (
-    <Animated.View
-      style={{
-        flex: 1,
-        justifyContent: 'flex-end',
-        flexDirection: 'row',
-        alignItems: 'center',
-        opacity: percentOpen,
-        // Fade in on open
-      }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          width: 60,
-          justifyContent: 'space-between',
-        }}>
-        <Ionicons name="create-outline" color="#007aff" size={22} />
-        <Ionicons name="trash-outline" color="#ff3b30" size={22} />
-      </View>
-    </Animated.View>
-  );
-
-  const renderItem = useCallback(
-    ({item, index, drag}: RenderItemParams<ListItem>) => {
-      return (
-        <SwipeableItem
-          key={index}
-          item={item}
-          ref={ref => {
-            if (ref && !itemRefs.get(index)) {
-              itemRefs.set(index, ref);
-            }
-          }}
-          onChange={({open}) => {
-            if (open) {
-              [...itemRefs.entries()].forEach(([key, ref]) => {
-                if (key !== index && ref) {
-                  ref.close();
-                }
-              });
-            }
-          }}
-          overSwipe={10}
-          snapPointsLeft={[30]}
-          renderUnderlayLeft={renderUnderlayLeft}>
-          <TouchableOpacity onLongPress={drag}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <CheckBox
-                boxType="square"
-                style={{height: 16, marginLeft: 5}}
-                animationDuration={0.05}
-                lineWidth={1.5}
-                value={item.checkVal}
-                onValueChange={newValue => {
-                  const changedItems = [...JSON.parse(currentList.items)];
-                  changedItems[index!] = {
-                    checkVal: newValue,
-                    name: item.name,
-                  };
-                  const changedShoppingData = [...shoppingData];
-                  changedShoppingData[currentPageIndex] = {
-                    ...currentList,
-                    items: JSON.stringify(changedItems),
-                  };
-                  setShoppingData(changedShoppingData);
-                  updateListItem(
-                    db,
-                    currentList.id!,
-                    JSON.stringify(changedItems),
-                  );
-                }}
-              />
-              <Text
-                adjustsFontSizeToFit
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                minimumFontScale={0.01}
-                // selectable // incompatible with long-hold drag
-                style={{
-                  maxWidth: 330,
-                  fontSize: 18,
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                }}>
-                {item.name}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </SwipeableItem>
-      );
-    },
-    [],
-  );
   return (
     <View
       style={{
         backgroundColor: 'white',
+        // flex: 1,
         height: '100%',
-        width: '100%',
+        width: 350,
+        // width: '100%',
         borderRadius: 12,
         padding: 10,
       }}>
@@ -168,7 +72,10 @@ const Card: React.FC<ListCardProps> = ({
             {name}
           </Text>
         </TouchableOpacity>
-        <Buttons setAddItemModalVis={setAddItemModalVis} />
+        <Buttons
+          setAddItemModalVis={setAddItemModalVis}
+          setRemoveListModalVis={setRemoveListModalVis}
+        />
       </View>
       <DraggableFlatList
         style={{
@@ -182,23 +89,51 @@ const Card: React.FC<ListCardProps> = ({
         }}
         onDragEnd={({data}) => {
           const changedShoppingData = [...shoppingData];
-          changedShoppingData[currentPageIndex] = {
-            ...currentList,
+          changedShoppingData[pageIndex] = {
+            ...shoppingData[pageIndex],
             items: JSON.stringify(data),
           };
           setShoppingData(changedShoppingData);
-          updateListItem(db, currentList.id!, JSON.stringify(data));
+          updateListItem(db, shoppingData[pageIndex].id!, JSON.stringify(data));
         }}
         persistentScrollbar={true}
         ItemSeparatorComponent={Separator}
         data={items ? JSON.parse(items) : []}
-        renderItem={renderItem}
+        renderItem={ListCardItem({
+          items,
+          shoppingData,
+          db,
+          pageIndex,
+          setShoppingData,
+        })}
         keyExtractor={(item: ListItem, i: number) => {
           return 'draggable-item-' + i.toString();
         }}
+      />
+      <EditListName
+        db={db}
+        currentList={shoppingData[pageIndex]}
+        setShoppingData={setShoppingData}
+        editListNameModalVis={editListNameModalVis}
+        setEditListNameModalVis={setEditListNameModalVis}
+      />
+      <AddListItem
+        db={db}
+        currentList={shoppingData[pageIndex]}
+        setShoppingData={setShoppingData}
+        addItemModalVis={addItemModalVis}
+        setAddItemModalVis={setAddItemModalVis}
+      />
+      <RemoveList
+        db={db}
+        currentPageIndex={pageIndex}
+        shoppingData={shoppingData}
+        setShoppingData={setShoppingData}
+        removeListModalVis={removeListModalVis}
+        setRemoveListModalVis={setRemoveListModalVis}
       />
     </View>
   );
 };
 
-export default Card;
+export default ListCard;

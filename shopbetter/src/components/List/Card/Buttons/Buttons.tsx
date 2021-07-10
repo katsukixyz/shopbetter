@@ -5,10 +5,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface ButtonsProps {
+  setRemoveListModalVis: React.Dispatch<React.SetStateAction<boolean>>;
   setAddItemModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Buttons: React.FC<ButtonsProps> = ({setAddItemModalVis}) => {
+const Buttons: React.FC<ButtonsProps> = ({
+  setAddItemModalVis,
+  setRemoveListModalVis,
+}) => {
   return (
     <View
       style={{
@@ -28,7 +32,7 @@ const Buttons: React.FC<ButtonsProps> = ({setAddItemModalVis}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}
-        onPress={() => console.log('joe')}>
+        onPress={() => setRemoveListModalVis(true)}>
         <Ionicons name="trash-outline" color="white" size={18} />
       </TouchableOpacity>
       <TouchableOpacity

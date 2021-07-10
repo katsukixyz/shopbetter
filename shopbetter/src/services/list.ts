@@ -51,6 +51,22 @@ const editListName = (db: SQLiteDatabase, id: number, name: string) => {
   });
 };
 
+const removeList = (db: SQLiteDatabase, id: number) => {
+  return new Promise(resolve => {
+    const query = 'DELETE FROM shopping WHERE id = ?';
+    db.transaction(tx => {
+      tx.executeSql(
+        query,
+        [id],
+        (tx, result) => {
+          resolve();
+        },
+        err => console.log(err),
+      );
+    });
+  });
+};
+
 const updateListItem = (db: SQLiteDatabase, id: number, items: string) => {
   return new Promise(resolve => {
     const query = 'UPDATE shopping SET items = ? WHERE id = ?';
@@ -67,6 +83,4 @@ const updateListItem = (db: SQLiteDatabase, id: number, items: string) => {
   });
 };
 
-const removeListItem = () => {};
-
-export {addList, editListName, updateListItem};
+export {addList, removeList, editListName, updateListItem};
