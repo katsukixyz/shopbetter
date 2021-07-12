@@ -30,7 +30,7 @@ const RemoveList: React.FC<RemoveListProps> = ({
     removeList(db, currentList.id!).then(() => {
       getTableData(db, 'shopping').then(data => {
         setShoppingData(data);
-        setRemoveListModalVis(false);
+        // setRemoveListModalVis(false); // deleting list automatically destroys state for that list
       });
     });
   };
