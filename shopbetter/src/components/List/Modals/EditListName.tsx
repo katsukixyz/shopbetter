@@ -48,7 +48,6 @@ const EditListName: React.FC<EditListNameProps> = ({
     <AlertModal
       title="Edit list name"
       modalVis={editListNameModalVis}
-      setModalVis={setEditListNameModalVis}
       onConfirm={() => onConfirm()}
       onCancel={() => onCancel()}>
       <TextInput

@@ -12,7 +12,6 @@ interface AlertModalProps {
   };
   title: string;
   modalVis: boolean;
-  setModalVis: React.Dispatch<React.SetStateAction<boolean>>;
   onConfirm: () => void;
   onCancel: () => void;
   children: React.ReactNode;
@@ -22,7 +21,6 @@ const AlertModal: React.FC<AlertModalProps> = ({
   style,
   title,
   modalVis,
-  setModalVis,
   onConfirm,
   onCancel,
   children,
@@ -67,11 +65,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <TouchableOpacity
-              onPress={() => {
-                onCancel;
-                setModalVis(false);
-              }}>
+            <TouchableOpacity onPress={onCancel}>
               <Text
                 style={{
                   color: '#0a84ff',

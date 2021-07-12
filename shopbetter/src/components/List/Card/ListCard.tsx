@@ -19,6 +19,7 @@ import AddListItem from '../Modals/AddListItem';
 import RemoveList from '../Modals/RemoveList';
 import {getTableData} from '../../../services/initTransactions';
 import ListCardItem from './ListCardItem';
+import EditItemName from '../Modals/EditItemName';
 
 interface ListCardProps extends ListPage {
   db: SQLiteDatabase;
@@ -38,6 +39,11 @@ const ListCard: React.FC<ListCardProps> = ({
   const [removeListModalVis, setRemoveListModalVis] = useState(false);
   const [editListNameModalVis, setEditListNameModalVis] = useState(false);
   const [addItemModalVis, setAddItemModalVis] = useState(false);
+  const [editItemNameModalVis, setEditItemNameModalVis] = useState<{
+    visible: boolean;
+    index: number;
+    itemRefs: Map<any, any>;
+  }>({visible: false, index: 0, itemRefs: new Map()});
 
   return (
     <View
@@ -105,6 +111,7 @@ const ListCard: React.FC<ListCardProps> = ({
           db,
           pageIndex,
           setShoppingData,
+          setEditItemNameModalVis,
         })}
         keyExtractor={(item: ListItem, i: number) => {
           return 'draggable-item-' + i.toString();
@@ -124,10 +131,20 @@ const ListCard: React.FC<ListCardProps> = ({
         addItemModalVis={addItemModalVis}
         setAddItemModalVis={setAddItemModalVis}
       />
+      <EditItemName
+        db={db}
+        currentList={shoppingData[pageIndex]}
+        setShoppingData={setShoppingData}
+        itemRefs={editItemNameModalVis.itemRefs}
+        listIndex={editItemNameModalVis.index}
+        editItemNameModalVis={editItemNameModalVis.visible}
+        setEditItemNameModalVis={setEditItemNameModalVis}
+      />
       <RemoveList
         db={db}
-        currentPageIndex={pageIndex}
-        shoppingData={shoppingData}
+        currentList={shoppingData[pageIndex]}
+        // currentPageIndex={pageIndex}
+        // shoppingData={shoppingData}
         setShoppingData={setShoppingData}
         removeListModalVis={removeListModalVis}
         setRemoveListModalVis={setRemoveListModalVis}

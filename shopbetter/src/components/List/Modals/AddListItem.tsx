@@ -50,7 +50,6 @@ const AddListItem: React.FC<AddListItemProps> = ({
     <AlertModal
       title="Add item"
       modalVis={addItemModalVis}
-      setModalVis={setAddItemModalVis}
       onConfirm={() => onConfirm()}
       onCancel={() => onCancel()}>
       <TextInput

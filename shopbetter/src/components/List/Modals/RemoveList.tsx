@@ -4,25 +4,28 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
 import {removeList} from '../../../services/list';
 import {getTableData} from '../../../services/initTransactions';
+import {ListPage} from '../../../types/listTypes';
 
 interface RemoveListProps {
   db: SQLiteDatabase;
-  shoppingData: any;
+  // shoppingData: any;
+  currentList: ListPage;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
-  currentPageIndex: number;
+  // currentPageIndex: number;
   removeListModalVis: boolean;
   setRemoveListModalVis: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const RemoveList: React.FC<RemoveListProps> = ({
   db,
-  shoppingData,
+  currentList,
+  //   shoppingData,
   setShoppingData,
-  currentPageIndex,
   removeListModalVis,
+  //   currentPageIndex,
   setRemoveListModalVis,
 }) => {
-  const currentList = shoppingData[currentPageIndex];
+  // const currentList = shoppingData[currentPageIndex];
   const onConfirm = () => {
     removeList(db, currentList.id!).then(() => {
       getTableData(db, 'shopping').then(data => {
@@ -43,7 +46,6 @@ const RemoveList: React.FC<RemoveListProps> = ({
       }}
       title="Remove list"
       modalVis={removeListModalVis}
-      setModalVis={setRemoveListModalVis}
       onConfirm={() => onConfirm()}
       onCancel={() => onCancel()}>
       <Text>Are sure you want to delete this list?</Text>

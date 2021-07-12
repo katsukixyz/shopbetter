@@ -1,30 +1,23 @@
 import React, {useCallback, SetStateAction} from 'react';
-import {View, Text} from 'react-native';
-import DraggableFlatList, {
-  RenderItemParams,
-} from 'react-native-draggable-flatlist';
-import Animated from 'react-native-reanimated';
+import {View, Text, Animated} from 'react-native';
+import {RenderItemParams} from 'react-native-draggable-flatlist';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import SwipeableItem, {UnderlayParams} from 'react-native-swipeable-item';
 import CheckBox from '@react-native-community/checkbox';
-import Separator from '../Separator/Separator';
-import Buttons from './Buttons/Buttons';
-import {ListPage, ListItem} from '../../../types/listTypes';
+import {ListItem} from '../../../types/listTypes';
 import {updateListItem} from '../../../services/list';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import EditListName from '../Modals/EditListName';
-import AddListItem from '../Modals/AddListItem';
-import RemoveList from '../Modals/RemoveList';
-import {getTableData} from '../../../services/initTransactions';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 interface ListCardItemProps {
+  db: SQLiteDatabase;
+  pageIndex: number;
   items: string;
   shoppingData: any;
   setShoppingData: React.Dispatch<SetStateAction<any>>;
-  db: SQLiteDatabase;
-  pageIndex: number;
+  setEditItemNameModalVis: React.Dispatch<
+    SetStateAction<{visible: boolean; index: number; itemRefs: Map<any, any>}>
+  >;
 }
 
 const ListCardItem = ({
@@ -33,54 +26,71 @@ const ListCardItem = ({
   db,
   pageIndex,
   setShoppingData,
+  setEditItemNameModalVis,
 }: ListCardItemProps) => {
   const itemRefs = new Map();
 
-  const renderUnderlayLeft = ({percentOpen}: UnderlayParams<ListItem>) => (
-    <Animated.View
-      style={{
-        flex: 1,
-        justifyContent: 'flex-end',
-        flexDirection: 'row',
-        alignItems: 'center',
-        opacity: percentOpen,
-        // Fade in on open
-      }}>
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation,
+    _dragAnimatedValue: Animated.AnimatedInterpolation,
+    index: number,
+  ) => {
+    const trans = progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [60, 0],
+    });
+
+    return (
       <View
         style={{
-          flexDirection: 'row',
           width: 60,
-          justifyContent: 'space-between',
         }}>
-        <Ionicons name="create-outline" color="#007aff" size={22} />
-        <Ionicons name="trash-outline" color="#ff3b30" size={22} />
+        <Animated.View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            transform: [{translateX: trans}],
+          }}>
+          <Ionicons
+            name="create-outline"
+            color="#007aff"
+            size={22}
+            onPress={() => {
+              setEditItemNameModalVis({
+                visible: true,
+                index: index,
+                itemRefs: itemRefs,
+              });
+            }}
+          />
+          <Ionicons name="trash-outline" color="#ff3b30" size={22} />
+        </Animated.View>
       </View>
-    </Animated.View>
-  );
+    );
+  };
 
   return useCallback(
     ({item, index, drag}: RenderItemParams<ListItem>) => {
       return (
-        <SwipeableItem
-          key={index}
-          item={item}
+        <Swipeable
           ref={ref => {
             if (ref && !itemRefs.get(index)) {
               itemRefs.set(index, ref);
             }
           }}
-          onChange={({open}) => {
-            if (open) {
-              [...itemRefs.entries()].forEach(([key, ref]) => {
-                if (key !== index && ref) {
-                  ref.close();
-                }
-              });
-            }
+          onSwipeableWillOpen={() => {
+            [...itemRefs.entries()].forEach(([key, ref]) => {
+              if (key !== index && ref) {
+                ref.close();
+              }
+            });
           }}
-          overSwipe={10}
-          snapPointsLeft={[30]}
-          renderUnderlayLeft={renderUnderlayLeft}>
+          renderRightActions={(progress, drag) =>
+            renderRightActions(progress, drag, index!)
+          }
+          rightThreshold={70}>
           <TouchableOpacity
             onLongPress={() => {
               [...itemRefs.entries()].forEach(([key, ref]) => {
@@ -107,8 +117,6 @@ const ListCardItem = ({
                     checkVal: newValue,
                     name: item.name,
                   };
-                  // console.log(item, index, newValue);
-                  // console.log(changedItems);
                   const changedShoppingData = [...shoppingData];
                   changedShoppingData[pageIndex] = {
                     ...shoppingData[pageIndex],
@@ -138,7 +146,7 @@ const ListCardItem = ({
               </Text>
             </View>
           </TouchableOpacity>
-        </SwipeableItem>
+        </Swipeable>
       );
     },
     [shoppingData, pageIndex, items],
