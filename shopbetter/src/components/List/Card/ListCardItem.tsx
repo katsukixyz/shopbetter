@@ -137,6 +137,7 @@ const ListCardItem = ({
                 minimumFontScale={0.01}
                 // selectable // incompatible with long-hold drag
                 style={{
+                  flex: 1,
                   maxWidth: 330,
                   fontSize: 18,
                   paddingTop: 10,
