@@ -27,6 +27,20 @@ const List: React.FC<ListProps> = ({
   const [addListModalVis, setAddListModalVis] = useState(false);
   const scrollX = useRef(new Animated.Value(0)).current;
 
+  const memoizedRenderItem = useCallback(() => renderItem, [shoppingData]);
+
+  const renderItem = ({item, index}: {item: ListPage; index: number}) => (
+    <ListCard
+      key={item.id}
+      pageIndex={index}
+      name={item.name}
+      items={item.items}
+      db={shoppingDB}
+      shoppingData={shoppingData}
+      setShoppingData={setShoppingData}
+    />
+  );
+
   return (
     <SafeAreaView
       style={{
@@ -50,19 +64,8 @@ const List: React.FC<ListProps> = ({
               )}
               decelerationRate="fast"
               pagingEnabled
-              renderItem={({item, index}: {item: ListPage; index: number}) => {
-                return (
-                  <ListCard
-                    key={item.id}
-                    pageIndex={index}
-                    name={item.name}
-                    items={item.items}
-                    db={shoppingDB}
-                    shoppingData={shoppingData}
-                    setShoppingData={setShoppingData}
-                  />
-                );
-              }}
+              renderItem={memoizedRenderItem()}
+              // renderItem={renderItem}
             />
             <ScalingDot
               activeDotColor="black"

@@ -188,4 +188,4 @@ const ListCard: React.FC<ListCardProps> = ({
 };
 
 export {closeItemRefs};
-export default memo(ListCard);
+export default ListCard;
