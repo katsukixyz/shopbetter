@@ -110,7 +110,7 @@ const ListCard: React.FC<ListCardProps> = ({
         }}
         containerStyle={{
           flex: 1,
-          marginBottom: 20,
+          marginBottom: 25,
           maxHeight: JSON.parse(items).length * 42.7,
           //JANKY, VirtualizedList height cannot be controlled dynamically, especially if multiple are rendered at the same time like in a PageView
         }}
