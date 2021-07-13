@@ -1,13 +1,15 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-// interface Props {
-//     children: React.ReactNode
-// }
+interface PageHeaderProps {
+  style?: {
+    [key: string]: string | number;
+  };
+}
 
-const PageHeader: React.FC = ({children}) => {
+const PageHeader: React.FC<PageHeaderProps> = ({children, style}) => {
   return (
-    <View>
+    <View style={style}>
       <Text
         style={{
           fontSize: 36,

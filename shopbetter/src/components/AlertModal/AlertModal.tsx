@@ -48,15 +48,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
           <Text style={{fontSize: 24, fontWeight: '600', paddingBottom: 10}}>
             {title}
           </Text>
-          <View style={{paddingBottom: 20}}>
-            {/* <TextInput
-            placeholder="New list name"
-            style={{backgroundColor: '#f8f4f4', padding: 14, borderRadius: 6}}
-            onChangeText={setInput}
-            value={input}
-          /> */}
-            {children}
-          </View>
+          <View style={{paddingBottom: 20}}>{children}</View>
 
           <Separator style={{paddingBottom: 20, borderTopColor: '#d3d3d3'}} />
           <View
@@ -64,6 +56,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
               flex: 1,
               flexDirection: 'row',
               justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
             <TouchableOpacity onPress={onCancel}>
               <Text

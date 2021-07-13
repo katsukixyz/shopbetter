@@ -8,31 +8,28 @@ import {ListPage} from '../../../types/listTypes';
 
 interface RemoveListProps {
   db: SQLiteDatabase;
-  // shoppingData: any;
-  currentList: ListPage;
+  pageIndex: number;
+  shoppingData: any;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
-  // currentPageIndex: number;
   removeListModalVis: boolean;
   setRemoveListModalVis: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const RemoveList: React.FC<RemoveListProps> = ({
   db,
-  currentList,
-  //   shoppingData,
+  pageIndex,
+  shoppingData,
   setShoppingData,
   removeListModalVis,
-  //   currentPageIndex,
   setRemoveListModalVis,
 }) => {
-  // const currentList = shoppingData[currentPageIndex];
+  const currentList = shoppingData[pageIndex];
   const onConfirm = () => {
-    removeList(db, currentList.id!).then(() => {
-      getTableData(db, 'shopping').then(data => {
-        setShoppingData(data);
-        // setRemoveListModalVis(false); // deleting list automatically destroys state for that list
-      });
-    });
+    const updatedShoppingData = [...shoppingData];
+    updatedShoppingData.splice(pageIndex, 1);
+    setShoppingData(updatedShoppingData);
+
+    removeList(db, currentList.id!);
   };
 
   const onCancel = () => {

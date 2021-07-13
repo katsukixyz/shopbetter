@@ -18,6 +18,9 @@ interface ListCardItemProps {
   setEditItemNameModalVis: React.Dispatch<
     SetStateAction<{visible: boolean; index: number; itemRefs: Map<any, any>}>
   >;
+  setRemoveItemModalVis: React.Dispatch<
+    SetStateAction<{visible: boolean; index: number; itemRefs: Map<any, any>}>
+  >;
 }
 
 const ListCardItem = ({
@@ -27,6 +30,7 @@ const ListCardItem = ({
   pageIndex,
   setShoppingData,
   setEditItemNameModalVis,
+  setRemoveItemModalVis,
 }: ListCardItemProps) => {
   const itemRefs = new Map();
 
@@ -65,7 +69,18 @@ const ListCardItem = ({
               });
             }}
           />
-          <Ionicons name="trash-outline" color="#ff3b30" size={22} />
+          <Ionicons
+            name="trash-outline"
+            color="#ff3b30"
+            size={22}
+            onPress={() => {
+              setRemoveItemModalVis({
+                visible: true,
+                index: index,
+                itemRefs: itemRefs,
+              });
+            }}
+          />
         </Animated.View>
       </View>
     );

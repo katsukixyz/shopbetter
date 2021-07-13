@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useCallback, useState, useEffect, memo} from 'react';
 import {View, Text} from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
@@ -20,6 +20,7 @@ import RemoveList from '../Modals/RemoveList';
 import {getTableData} from '../../../services/initTransactions';
 import ListCardItem from './ListCardItem';
 import EditItemName from '../Modals/EditItemName';
+import RemoveListItem from '../Modals/RemoveListItem';
 
 interface ListCardProps extends ListPage {
   db: SQLiteDatabase;
@@ -27,6 +28,14 @@ interface ListCardProps extends ListPage {
   shoppingData: any;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
 }
+
+const closeItemRefs = (itemRefs: Map<any, any>) => {
+  [...itemRefs.entries()].forEach(([key, ref]) => {
+    if (ref) {
+      ref.close();
+    }
+  });
+};
 
 const ListCard: React.FC<ListCardProps> = ({
   db,
@@ -45,6 +54,16 @@ const ListCard: React.FC<ListCardProps> = ({
     itemRefs: Map<any, any>;
   }>({visible: false, index: 0, itemRefs: new Map()});
 
+  const [removeItemModalVis, setRemoveItemModalVis] = useState<{
+    visible: boolean;
+    index: number;
+    itemRefs: Map<any, any>;
+  }>({
+    visible: false,
+    index: 0,
+    itemRefs: new Map(),
+  });
+
   return (
     <View
       style={{
@@ -55,6 +74,8 @@ const ListCard: React.FC<ListCardProps> = ({
         // width: '100%',
         borderRadius: 12,
         padding: 10,
+        marginLeft: 20,
+        marginRight: 20,
       }}>
       <View
         style={{
@@ -112,6 +133,7 @@ const ListCard: React.FC<ListCardProps> = ({
           pageIndex,
           setShoppingData,
           setEditItemNameModalVis,
+          setRemoveItemModalVis,
         })}
         keyExtractor={(item: ListItem, i: number) => {
           return 'draggable-item-' + i.toString();
@@ -119,32 +141,44 @@ const ListCard: React.FC<ListCardProps> = ({
       />
       <EditListName
         db={db}
-        currentList={shoppingData[pageIndex]}
+        pageIndex={pageIndex}
+        shoppingData={shoppingData}
         setShoppingData={setShoppingData}
         editListNameModalVis={editListNameModalVis}
         setEditListNameModalVis={setEditListNameModalVis}
       />
       <AddListItem
         db={db}
-        currentList={shoppingData[pageIndex]}
+        shoppingData={shoppingData}
+        pageIndex={pageIndex}
         setShoppingData={setShoppingData}
         addItemModalVis={addItemModalVis}
         setAddItemModalVis={setAddItemModalVis}
       />
+      <RemoveListItem
+        db={db}
+        shoppingData={shoppingData}
+        pageIndex={pageIndex}
+        setShoppingData={setShoppingData}
+        itemRefs={removeItemModalVis.itemRefs}
+        listIndex={removeItemModalVis.index}
+        removeItemModalVis={removeItemModalVis.visible}
+        setRemoveItemModalVis={setRemoveItemModalVis}
+      />
       <EditItemName
         db={db}
-        currentList={shoppingData[pageIndex]}
+        shoppingData={shoppingData}
         setShoppingData={setShoppingData}
         itemRefs={editItemNameModalVis.itemRefs}
         listIndex={editItemNameModalVis.index}
+        pageIndex={pageIndex}
         editItemNameModalVis={editItemNameModalVis.visible}
         setEditItemNameModalVis={setEditItemNameModalVis}
       />
       <RemoveList
         db={db}
-        currentList={shoppingData[pageIndex]}
-        // currentPageIndex={pageIndex}
-        // shoppingData={shoppingData}
+        shoppingData={shoppingData}
+        pageIndex={pageIndex}
         setShoppingData={setShoppingData}
         removeListModalVis={removeListModalVis}
         setRemoveListModalVis={setRemoveListModalVis}
@@ -153,4 +187,5 @@ const ListCard: React.FC<ListCardProps> = ({
   );
 };
 
-export default ListCard;
+export {closeItemRefs};
+export default memo(ListCard);

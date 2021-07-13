@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {ListPage} from '../../../types/listTypes';
 import AlertModal from '../../AlertModal/AlertModal';
 import {TextInput} from 'react-native-gesture-handler';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {updateListItem} from '../../../services/list';
-import {getTableData} from '../../../services/initTransactions';
+import {closeItemRefs} from '../Card/ListCard';
 
 interface EditItemNameProps {
   db: SQLiteDatabase;
-  currentList: ListPage;
   listIndex: number;
+  pageIndex: number;
   itemRefs: Map<any, any>;
+  shoppingData: any;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
   editItemNameModalVis: boolean;
   setEditItemNameModalVis: React.Dispatch<
@@ -24,40 +24,39 @@ interface EditItemNameProps {
 
 const EditItemName: React.FC<EditItemNameProps> = ({
   db,
-  currentList,
   listIndex,
+  pageIndex,
   itemRefs,
+  shoppingData,
   setShoppingData,
   editItemNameModalVis,
   setEditItemNameModalVis,
 }) => {
+  const currentList = shoppingData[pageIndex];
+
   const [nameInput, setNameInput] = useState('');
 
   useEffect(() => {
-    if (currentList && JSON.parse(currentList.items).length !== 0) {
-      setNameInput(JSON.parse(currentList.items)[listIndex].name);
+    if (currentList) {
+      if (JSON.parse(currentList.items).length > 0) {
+        setNameInput(JSON.parse(currentList.items)[listIndex].name);
+      }
     }
-  }, [currentList, listIndex]);
+  }, [shoppingData, currentList, pageIndex, listIndex]);
 
   const onConfirm = () => {
     const currentItems = JSON.parse(currentList.items);
-    // console.log(currentItems[listIndex]);
     if (nameInput !== currentItems[listIndex]) {
       const updatedItems = [...currentItems];
       updatedItems[listIndex].name = nameInput;
-      updateListItem(db, currentList.id!, JSON.stringify(updatedItems)).then(
-        () => {
-          getTableData(db, 'shopping').then(data => {
-            setShoppingData(data);
-          });
-        },
-      );
+
+      const updatedShoppingData = [...shoppingData];
+      updatedShoppingData[pageIndex].items = JSON.stringify(updatedItems);
+      setShoppingData(updatedShoppingData);
+
+      updateListItem(db, currentList.id!, JSON.stringify(updatedItems));
     }
-    [...itemRefs.entries()].forEach(([key, ref]) => {
-      if (ref) {
-        ref.close();
-      }
-    });
+    closeItemRefs(itemRefs);
     setEditItemNameModalVis({
       visible: false,
       index: listIndex,

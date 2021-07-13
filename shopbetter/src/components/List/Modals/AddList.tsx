@@ -21,12 +21,13 @@ const AddList: React.FC<AddListProps> = ({
   addListModalVis,
   setAddListModalVis,
 }) => {
+  //! only modal that should re-fetch from db since it cannot determine next id (which is done on the backend)
+
   const [nameInput, setNameInput] = useState('');
 
   const onConfirm = () => {
     addList(db, {name: nameInput, items: JSON.stringify([])}).then(() => {
       getTableData(db, 'shopping').then(data => {
-        console.log('addList', data);
         setShoppingData(data);
         setAddListModalVis(false);
         setNameInput('');
@@ -43,7 +44,6 @@ const AddList: React.FC<AddListProps> = ({
     <AlertModal
       title="Add list"
       modalVis={addListModalVis}
-      setModalVis={setAddListModalVis}
       onConfirm={() => onConfirm()}
       onCancel={() => onCancel()}>
       <TextInput

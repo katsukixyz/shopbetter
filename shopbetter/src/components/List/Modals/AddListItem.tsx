@@ -8,19 +8,22 @@ import {ListPage, ListItem} from '../../../types/listTypes';
 
 interface AddListItemProps {
   db: SQLiteDatabase;
+  shoppingData: any;
+  pageIndex: number;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
-  currentList: ListPage;
   addItemModalVis: boolean;
   setAddItemModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AddListItem: React.FC<AddListItemProps> = ({
   db,
+  pageIndex,
+  shoppingData,
   setShoppingData,
-  currentList,
   addItemModalVis,
   setAddItemModalVis,
 }) => {
+  const currentList = shoppingData[pageIndex];
   const [itemNameInput, setItemNameInput] = useState('');
 
   const onConfirm = () => {
@@ -30,15 +33,12 @@ const AddListItem: React.FC<AddListItemProps> = ({
       checkVal: false,
     });
 
-    console.log('addListItem', items);
-
-    updateListItem(db, currentList.id!, JSON.stringify(items)).then(() => {
-      getTableData(db, 'shopping').then(data => {
-        setShoppingData(data);
-        setAddItemModalVis(false);
-        setItemNameInput('');
-      });
-    });
+    const updatedShoppingData = [...shoppingData];
+    updatedShoppingData[pageIndex].items = JSON.stringify(items);
+    setShoppingData(updatedShoppingData);
+    updateListItem(db, currentList.id!, JSON.stringify(items));
+    setItemNameInput('');
+    setAddItemModalVis(false);
   };
 
   const onCancel = () => {

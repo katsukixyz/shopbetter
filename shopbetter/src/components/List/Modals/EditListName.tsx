@@ -8,19 +8,23 @@ import {ListPage} from '../../../types/listTypes';
 
 interface EditListNameProps {
   db: SQLiteDatabase;
+  pageIndex: number;
+  shoppingData: any;
   setShoppingData: React.Dispatch<React.SetStateAction<any>>;
-  currentList: ListPage;
   editListNameModalVis: boolean;
   setEditListNameModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EditListName: React.FC<EditListNameProps> = ({
   db,
+  pageIndex,
+  shoppingData,
   setShoppingData,
-  currentList,
+  // currentList,
   editListNameModalVis,
   setEditListNameModalVis,
 }) => {
+  const currentList = shoppingData[pageIndex];
   const [nameInput, setNameInput] = useState('');
 
   useEffect(() => {
@@ -31,12 +35,12 @@ const EditListName: React.FC<EditListNameProps> = ({
 
   const onConfirm = () => {
     if (nameInput !== currentList.name) {
-      editListName(db, currentList.id!, nameInput).then(() => {
-        getTableData(db, 'shopping').then(data => {
-          setShoppingData(data);
-          setEditListNameModalVis(false);
-        });
-      });
+      const updatedShoppingData = [...shoppingData];
+      updatedShoppingData[pageIndex].name = nameInput;
+
+      setShoppingData(updatedShoppingData);
+      editListName(db, currentList.id!, nameInput);
+      setEditListNameModalVis(false);
     }
   };
 
