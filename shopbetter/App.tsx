@@ -22,6 +22,7 @@ import {
   deleteTable,
 } from './src/services/initTransactions';
 import {openDatabase} from 'react-native-sqlite-storage';
+import {ListPage} from './src/types/listTypes';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +46,7 @@ const shoppingDB = openDatabase(
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [comparisonData, setComparisonData] = useState<any>([]);
-  const [shoppingData, setShoppingData] = useState<any>([]);
+  const [shoppingData, setShoppingData] = useState<ListPage[]>([]);
 
   useEffect(() => {
     // deleteTable(comparisonDB, 'comparison');
@@ -55,7 +56,7 @@ const App = () => {
     getTableData(comparisonDB, 'comparison').then(data => {
       setComparisonData(data);
     });
-    getTableData(shoppingDB, 'shopping').then(data => {
+    getTableData(shoppingDB, 'shopping').then((data: ListPage[]) => {
       setShoppingData(data);
     });
   }, []);

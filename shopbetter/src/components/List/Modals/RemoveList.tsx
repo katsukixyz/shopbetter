@@ -9,8 +9,8 @@ import {ListPage} from '../../../types/listTypes';
 interface RemoveListProps {
   db: SQLiteDatabase;
   pageIndex: number;
-  shoppingData: any;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  shoppingData: ListPage[];
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
   removeListModalVis: boolean;
   setRemoveListModalVis: React.Dispatch<SetStateAction<boolean>>;
 }

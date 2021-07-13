@@ -1,9 +1,8 @@
-import React, {useState, useEffect, SetStateAction} from 'react';
+import React, {SetStateAction} from 'react';
 import {Text} from 'react-native';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
-import {removeList, updateListItem} from '../../../services/list';
-import {getTableData} from '../../../services/initTransactions';
+import {updateListItem} from '../../../services/list';
 import {ListPage} from '../../../types/listTypes';
 import {closeItemRefs} from '../Card/ListCard';
 
@@ -12,8 +11,8 @@ interface RemoveItemProps {
   listIndex: number;
   pageIndex: number;
   itemRefs: Map<any, any>;
-  shoppingData: any;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  shoppingData: ListPage[];
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
   removeItemModalVis: boolean;
   setRemoveItemModalVis: React.Dispatch<
     SetStateAction<{visible: boolean; index: number; itemRefs: Map<any, any>}>

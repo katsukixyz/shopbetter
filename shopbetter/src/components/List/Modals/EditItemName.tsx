@@ -4,14 +4,15 @@ import {TextInput} from 'react-native-gesture-handler';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {updateListItem} from '../../../services/list';
 import {closeItemRefs} from '../Card/ListCard';
+import {ListPage} from '../../../types/listTypes';
 
 interface EditItemNameProps {
   db: SQLiteDatabase;
   listIndex: number;
   pageIndex: number;
   itemRefs: Map<any, any>;
-  shoppingData: any;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  shoppingData: ListPage[];
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
   editItemNameModalVis: boolean;
   setEditItemNameModalVis: React.Dispatch<
     React.SetStateAction<{

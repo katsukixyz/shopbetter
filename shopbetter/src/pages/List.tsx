@@ -1,22 +1,19 @@
-import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {View, Animated} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
-import PagerView from 'react-native-pager-view';
 import ListCard from '../components/List/Card/ListCard';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import ComposeButton from '../components/List/ComposeButton/ComposeButton';
 import AddList from '../components/List/Modals/AddList';
-import {addList, editListName} from '../services/list';
-import EditListName from '../components/List/Modals/EditListName';
-import {ListPage, ListItem} from '../types/listTypes';
+import {ListPage} from '../types/listTypes';
 import {FlatList} from 'react-native-gesture-handler';
-import {ScalingDot, SlidingBorder} from 'react-native-animated-pagination-dots';
+import {ScalingDot} from 'react-native-animated-pagination-dots';
 
 interface ListProps {
   shoppingDB: SQLiteDatabase;
-  shoppingData: any;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  shoppingData: ListPage[];
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
 }
 
 const List: React.FC<ListProps> = ({

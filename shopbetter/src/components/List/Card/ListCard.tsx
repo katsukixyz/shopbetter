@@ -25,8 +25,8 @@ import RemoveListItem from '../Modals/RemoveListItem';
 interface ListCardProps extends ListPage {
   db: SQLiteDatabase;
   pageIndex: number;
-  shoppingData: any;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  shoppingData: ListPage[];
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
 }
 
 const closeItemRefs = (itemRefs: Map<any, any>) => {

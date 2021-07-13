@@ -7,10 +7,11 @@ import Separator from '../Separator/Separator';
 import AlertModal from '../../AlertModal/AlertModal';
 import Modal from 'react-native-modal';
 import {getTableData} from '../../../services/initTransactions';
+import {ListPage} from '../../../types/listTypes';
 
 interface AddListProps {
   db: SQLiteDatabase;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
   addListModalVis: boolean;
   setAddListModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }

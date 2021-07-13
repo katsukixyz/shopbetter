@@ -1,4 +1,5 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
+import {ListPage} from '../types/listTypes';
 
 //! cannot autoincrement since existing devices already have db with no autoincrement, and as such, not all devices will have an autoincrementing database
 
@@ -35,7 +36,7 @@ const createTable = (
 };
 
 const getTableData = (db: SQLiteDatabase, tableName: string) => {
-  return new Promise(resolve => {
+  return new Promise<ListPage[]>(resolve => {
     db.transaction(tx => {
       tx.executeSql(`SELECT * FROM ${tableName}`, [], (tx, result) => {
         resolve(result.rows.raw());

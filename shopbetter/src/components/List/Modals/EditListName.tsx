@@ -9,8 +9,8 @@ import {ListPage} from '../../../types/listTypes';
 interface EditListNameProps {
   db: SQLiteDatabase;
   pageIndex: number;
-  shoppingData: any;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  shoppingData: ListPage[];
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
   editListNameModalVis: boolean;
   setEditListNameModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }

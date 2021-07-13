@@ -3,7 +3,7 @@ import {View, Text, Animated} from 'react-native';
 import {RenderItemParams} from 'react-native-draggable-flatlist';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CheckBox from '@react-native-community/checkbox';
-import {ListItem} from '../../../types/listTypes';
+import {ListItem, ListPage} from '../../../types/listTypes';
 import {updateListItem} from '../../../services/list';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,8 +13,8 @@ interface ListCardItemProps {
   db: SQLiteDatabase;
   pageIndex: number;
   items: string;
-  shoppingData: any;
-  setShoppingData: React.Dispatch<SetStateAction<any>>;
+  shoppingData: ListPage[];
+  setShoppingData: React.Dispatch<SetStateAction<ListPage[]>>;
   setEditItemNameModalVis: React.Dispatch<
     SetStateAction<{visible: boolean; index: number; itemRefs: Map<any, any>}>
   >;

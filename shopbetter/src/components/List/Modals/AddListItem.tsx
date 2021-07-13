@@ -8,9 +8,9 @@ import {ListPage, ListItem} from '../../../types/listTypes';
 
 interface AddListItemProps {
   db: SQLiteDatabase;
-  shoppingData: any;
+  shoppingData: ListPage[];
   pageIndex: number;
-  setShoppingData: React.Dispatch<React.SetStateAction<any>>;
+  setShoppingData: React.Dispatch<React.SetStateAction<ListPage[]>>;
   addItemModalVis: boolean;
   setAddItemModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }
