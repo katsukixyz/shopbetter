@@ -15,6 +15,7 @@ import {Comparison} from '../types/compareTypes';
 import AddComparison from '../components/Compare/Modals/AddComparison';
 import CompareCard from '../components/Compare/CompareCard/CompareCard';
 import EditComparison from '../components/Compare/Modals/EditComparison';
+import RemoveComparison from '../components/Compare/Modals/RemoveComparison';
 
 interface CompareProps {
   comparisonDB: SQLiteDatabase;
@@ -32,6 +33,10 @@ const Compare: React.FC<CompareProps> = ({
     index: 0,
     visible: false,
   });
+  const [removeComparisonModalVis, setRemoveComparisonModalVis] = useState({
+    index: 0,
+    visible: false,
+  });
 
   const itemRefs = new Map();
 
@@ -41,6 +46,7 @@ const Compare: React.FC<CompareProps> = ({
       itemRefs={itemRefs}
       index={index}
       setEditComparisonModalVis={setEditComparisonModalVis}
+      setRemoveComparisonModalVis={setRemoveComparisonModalVis}
     />
   );
 
@@ -75,6 +81,14 @@ const Compare: React.FC<CompareProps> = ({
         itemRefs={itemRefs}
         index={editComparisonModalVis.index}
         setEditComparisonModalVis={setEditComparisonModalVis}
+      />
+      <RemoveComparison
+        db={comparisonDB}
+        comparisonData={comparisonData}
+        setComparisonData={setComparisonData}
+        index={removeComparisonModalVis.index}
+        removeComparisonModalVis={removeComparisonModalVis.visible}
+        setRemoveComparisonModalVis={setRemoveComparisonModalVis}
       />
     </SafeAreaView>
   );

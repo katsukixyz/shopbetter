@@ -95,4 +95,20 @@ const updateComparison = (db: SQLiteDatabase, values: Comparison) => {
   });
 };
 
-export {getComparisonData, addComparison, updateComparison};
+const removeComparison = (db: SQLiteDatabase, id: number) => {
+  return new Promise(resolve => {
+    const query = 'DELETE FROM comparison WHERE id = ?';
+    db.transaction(tx => {
+      tx.executeSql(
+        query,
+        [id],
+        (tx, result) => {
+          resolve();
+        },
+        err => console.log(err),
+      );
+    });
+  });
+};
+
+export {getComparisonData, addComparison, updateComparison, removeComparison};

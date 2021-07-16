@@ -21,6 +21,9 @@ interface CompareCardProps {
       index: number;
     }>
   >;
+  setRemoveComparisonModalVis: React.Dispatch<
+    React.SetStateAction<{visible: boolean; index: number}>
+  >;
 }
 
 const CompareCard: React.FC<CompareCardProps> = ({
@@ -28,6 +31,7 @@ const CompareCard: React.FC<CompareCardProps> = ({
   index,
   itemRefs,
   setEditComparisonModalVis,
+  setRemoveComparisonModalVis,
 }) => {
   const renderRightActions = (
     progress: Animated.AnimatedInterpolation,
@@ -74,6 +78,9 @@ const CompareCard: React.FC<CompareCardProps> = ({
           </View>
           <View style={{alignItems: 'center'}}>
             <TouchableOpacity
+              onPress={() =>
+                setRemoveComparisonModalVis({visible: true, index: index})
+              }
               style={{
                 width: 40,
                 height: 40,
