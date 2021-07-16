@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   // TouchableOpacity,
 } from 'react-native-gesture-handler';
-import {Picker} from '@react-native-picker/picker';
 import {Comparison} from '../../../types/compareTypes';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,6 +23,9 @@ interface CompareCardProps {
   setRemoveComparisonModalVis: React.Dispatch<
     React.SetStateAction<{visible: boolean; index: number}>
   >;
+  setStorePickerModalVis: React.Dispatch<
+    React.SetStateAction<{visible: boolean; index: number}>
+  >;
 }
 
 const CompareCard: React.FC<CompareCardProps> = ({
@@ -32,6 +34,7 @@ const CompareCard: React.FC<CompareCardProps> = ({
   itemRefs,
   setEditComparisonModalVis,
   setRemoveComparisonModalVis,
+  setStorePickerModalVis,
 }) => {
   const renderRightActions = (
     progress: Animated.AnimatedInterpolation,
@@ -147,7 +150,9 @@ const CompareCard: React.FC<CompareCardProps> = ({
                 justifyContent: 'center',
                 padding: 5,
               }}
-              onPress={() => console.log('joe')}>
+              onPress={() =>
+                setStorePickerModalVis({index: index, visible: true})
+              }>
               <Text>{item.store}</Text>
             </RectButton>
           </View>
@@ -204,15 +209,6 @@ const CompareCard: React.FC<CompareCardProps> = ({
             )}/unit`}</Text>
           </View>
         </View>
-        {/* <Picker
-          style={{backgroundColor: 'red'}}
-          selectedValue={selectedLanguage}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage(itemValue)
-          }>
-          <Picker.Item label="joe" value="joe" />
-          <Picker.Item label="joe2" value="joe2" />
-        </Picker> */}
       </View>
     </Swipeable>
   );

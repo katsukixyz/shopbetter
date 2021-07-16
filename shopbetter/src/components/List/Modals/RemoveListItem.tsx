@@ -64,7 +64,7 @@ const RemoveListItem: React.FC<RemoveItemProps> = ({
       modalVis={removeItemModalVis}
       onConfirm={() => onConfirm()}
       onCancel={() => onCancel()}>
-      <Text>Are sure you want to delete this item?</Text>
+      <Text>Are you sure you want to delete this item?</Text>
     </AlertModal>
   );
 };

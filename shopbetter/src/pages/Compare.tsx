@@ -16,6 +16,7 @@ import AddComparison from '../components/Compare/Modals/AddComparison';
 import CompareCard from '../components/Compare/CompareCard/CompareCard';
 import EditComparison from '../components/Compare/Modals/EditComparison';
 import RemoveComparison from '../components/Compare/Modals/RemoveComparison';
+import StorePicker from '../components/Compare/Modals/StorePicker';
 
 interface CompareProps {
   comparisonDB: SQLiteDatabase;
@@ -38,6 +39,11 @@ const Compare: React.FC<CompareProps> = ({
     visible: false,
   });
 
+  const [storePickerModalVis, setStorePickerModalVis] = useState({
+    index: 0,
+    visible: false,
+  });
+
   const itemRefs = new Map();
 
   const renderItem = ({item, index}: {item: Comparison; index: number}) => (
@@ -47,6 +53,7 @@ const Compare: React.FC<CompareProps> = ({
       index={index}
       setEditComparisonModalVis={setEditComparisonModalVis}
       setRemoveComparisonModalVis={setRemoveComparisonModalVis}
+      setStorePickerModalVis={setStorePickerModalVis}
     />
   );
 
@@ -89,6 +96,14 @@ const Compare: React.FC<CompareProps> = ({
         index={removeComparisonModalVis.index}
         removeComparisonModalVis={removeComparisonModalVis.visible}
         setRemoveComparisonModalVis={setRemoveComparisonModalVis}
+      />
+      <StorePicker
+        db={comparisonDB}
+        comparisonData={comparisonData}
+        setComparisonData={setComparisonData}
+        index={storePickerModalVis.index}
+        storePickerModalVis={storePickerModalVis.visible}
+        setStorePickerModalVis={setStorePickerModalVis}
       />
     </SafeAreaView>
   );
