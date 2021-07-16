@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import DraggableFlatList, {
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import Animated from 'react-native-reanimated';
+import Animated, {AnimatedLayout} from 'react-native-reanimated';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import SwipeableItem, {UnderlayParams} from 'react-native-swipeable-item';
 import CheckBox from '@react-native-community/checkbox';
@@ -17,7 +17,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import EditListName from '../Modals/EditListName';
 import AddListItem from '../Modals/AddListItem';
 import RemoveList from '../Modals/RemoveList';
-import {getTableData} from '../../../services/initTransactions';
 import ListCardItem from './ListCardItem';
 import EditItemName from '../Modals/EditItemName';
 import RemoveListItem from '../Modals/RemoveListItem';
@@ -63,6 +62,8 @@ const ListCard: React.FC<ListCardProps> = ({
     index: 0,
     itemRefs: new Map(),
   });
+
+  const itemRefs = new Map();
 
   return (
     <View
@@ -111,22 +112,23 @@ const ListCard: React.FC<ListCardProps> = ({
         containerStyle={{
           flex: 1,
           marginBottom: 25,
-          maxHeight: JSON.parse(items).length * 42.7,
+          maxHeight: items ? items.length * 42.7 : 0,
           //JANKY, VirtualizedList height cannot be controlled dynamically, especially if multiple are rendered at the same time like in a PageView
         }}
         onDragEnd={({data}) => {
           const changedShoppingData = [...shoppingData];
           changedShoppingData[pageIndex] = {
             ...shoppingData[pageIndex],
-            items: JSON.stringify(data),
+            items: data,
           };
           setShoppingData(changedShoppingData);
           updateListItem(db, shoppingData[pageIndex].id!, JSON.stringify(data));
         }}
         persistentScrollbar={true}
         ItemSeparatorComponent={Separator}
-        data={items ? JSON.parse(items) : []}
+        data={items ? items : []}
         renderItem={ListCardItem({
+          itemRefs,
           items,
           shoppingData,
           db,

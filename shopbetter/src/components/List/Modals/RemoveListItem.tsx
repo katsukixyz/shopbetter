@@ -32,10 +32,10 @@ const RemoveListItem: React.FC<RemoveItemProps> = ({
   const currentList = shoppingData[pageIndex];
 
   const onConfirm = () => {
-    const updatedItems = [...JSON.parse(currentList.items)];
+    const updatedItems = [...currentList.items];
     updatedItems.splice(listIndex, 1);
     const updatedShoppingData = [...shoppingData];
-    updatedShoppingData[pageIndex].items = JSON.stringify(updatedItems);
+    updatedShoppingData[pageIndex].items = updatedItems;
 
     closeItemRefs(itemRefs);
     setShoppingData(updatedShoppingData);

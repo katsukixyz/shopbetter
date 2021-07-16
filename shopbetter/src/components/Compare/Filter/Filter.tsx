@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const AddButton: React.FC = () => {
   return (
@@ -16,7 +17,7 @@ const AddButton: React.FC = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <MaterialCommunityIcons name="filter" color="white" size={15} />
+      <Ionicons name="filter" color="white" size={16} />
     </TouchableOpacity>
   );
 };

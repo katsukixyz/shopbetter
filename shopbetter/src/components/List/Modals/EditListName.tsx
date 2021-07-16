@@ -3,7 +3,6 @@ import {TextInput} from 'react-native';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
 import {editListName} from '../../../services/list';
-import {getTableData} from '../../../services/initTransactions';
 import {ListPage} from '../../../types/listTypes';
 
 interface EditListNameProps {

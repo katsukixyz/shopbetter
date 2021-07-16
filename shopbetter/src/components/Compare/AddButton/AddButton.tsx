@@ -2,9 +2,14 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const AddButton: React.FC = () => {
+interface AddButtonProps {
+  setAddComparisonModalVis: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AddButton: React.FC<AddButtonProps> = ({setAddComparisonModalVis}) => {
   return (
     <TouchableOpacity
+      onPress={() => setAddComparisonModalVis(true)}
       style={{
         width: 60,
         height: 60,

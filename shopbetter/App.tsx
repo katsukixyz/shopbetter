@@ -16,13 +16,12 @@ import List from './src/pages/List';
 import Compare from './src/pages/Compare';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  createTable,
-  getTableData,
-  deleteTable,
-} from './src/services/initTransactions';
+import {createTable, deleteTable} from './src/services/initTransactions';
 import {openDatabase} from 'react-native-sqlite-storage';
 import {ListPage} from './src/types/listTypes';
+import {Comparison} from './src/types/compareTypes';
+import {getListData} from './src/services/list';
+import {getComparisonData} from './src/services/compare';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +44,7 @@ const shoppingDB = openDatabase(
 );
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [comparisonData, setComparisonData] = useState<any>([]);
+  const [comparisonData, setComparisonData] = useState<Comparison[]>([]);
   const [shoppingData, setShoppingData] = useState<ListPage[]>([]);
 
   useEffect(() => {
@@ -53,11 +52,11 @@ const App = () => {
     // deleteTable(shoppingDB, 'shopping');
     createTable(comparisonDB, 'comparison');
     createTable(shoppingDB, 'shopping');
-    getTableData(comparisonDB, 'comparison').then(data => {
-      setComparisonData(data);
-    });
-    getTableData(shoppingDB, 'shopping').then((data: ListPage[]) => {
+    getListData(shoppingDB).then((data: ListPage[]) => {
       setShoppingData(data);
+    });
+    getComparisonData(comparisonDB).then((data: Comparison[]) => {
+      setComparisonData(data);
     });
   }, []);
 
@@ -84,6 +83,7 @@ const App = () => {
             {props => (
               <Compare
                 {...props}
+                comparisonDB={comparisonDB}
                 comparisonData={comparisonData}
                 setComparisonData={setComparisonData}
               />

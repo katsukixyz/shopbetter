@@ -1,5 +1,6 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {ListPage} from '../types/listTypes';
+import {Comparison} from '../types/compareTypes';
 
 //! cannot autoincrement since existing devices already have db with no autoincrement, and as such, not all devices will have an autoincrementing database
 
@@ -28,6 +29,7 @@ const createTable = (
       break;
     case 'comparison':
       query = `CREATE TABLE IF NOT EXISTS ${tableName} (id INTEGER PRIMARY KEY, name TEXT, store TEXT, price DOUBLE, quantity DOUBLE)`;
+      // query = `CREATE TABLE IF NOT EXISTS ${tableName} (comparisonid INTEGER PRIMARY KEY, comparisonname TEXT, comparisonstore TEXT, comparisonprice DOUBLE, comparisonquantity DOUBLE)`;
       break;
   }
   db.transaction(tx => {
@@ -35,14 +37,4 @@ const createTable = (
   });
 };
 
-const getTableData = (db: SQLiteDatabase, tableName: string) => {
-  return new Promise<ListPage[]>(resolve => {
-    db.transaction(tx => {
-      tx.executeSql(`SELECT * FROM ${tableName}`, [], (tx, result) => {
-        resolve(result.rows.raw());
-      });
-    });
-  });
-};
-
-export {deleteTable, createTable, getTableData};
+export {deleteTable, createTable};

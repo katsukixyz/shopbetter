@@ -3,7 +3,6 @@ import {TextInput} from 'react-native';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
 import {updateListItem} from '../../../services/list';
-import {getTableData} from '../../../services/initTransactions';
 import {ListPage, ListItem} from '../../../types/listTypes';
 
 interface AddListItemProps {
@@ -27,14 +26,14 @@ const AddListItem: React.FC<AddListItemProps> = ({
   const [itemNameInput, setItemNameInput] = useState('');
 
   const onConfirm = () => {
-    let items: ListItem[] = JSON.parse(currentList.items);
+    let items: ListItem[] = currentList.items;
     items.push({
       name: itemNameInput,
       checkVal: false,
     });
 
     const updatedShoppingData = [...shoppingData];
-    updatedShoppingData[pageIndex].items = JSON.stringify(items);
+    updatedShoppingData[pageIndex].items = items;
     setShoppingData(updatedShoppingData);
     updateListItem(db, currentList.id!, JSON.stringify(items));
     setItemNameInput('');

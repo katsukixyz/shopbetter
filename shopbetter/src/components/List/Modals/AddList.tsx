@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {addList} from '../../../services/list';
+import {addList, getListData} from '../../../services/list';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import Separator from '../Separator/Separator';
 import AlertModal from '../../AlertModal/AlertModal';
 import Modal from 'react-native-modal';
-import {getTableData} from '../../../services/initTransactions';
 import {ListPage} from '../../../types/listTypes';
 
 interface AddListProps {
@@ -28,7 +27,7 @@ const AddList: React.FC<AddListProps> = ({
 
   const onConfirm = () => {
     addList(db, {name: nameInput, items: JSON.stringify([])}).then(() => {
-      getTableData(db, 'shopping').then(data => {
+      getListData(db).then(data => {
         setShoppingData(data);
         setAddListModalVis(false);
         setNameInput('');

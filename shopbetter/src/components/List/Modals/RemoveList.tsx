@@ -3,7 +3,6 @@ import {Text} from 'react-native';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
 import {removeList} from '../../../services/list';
-import {getTableData} from '../../../services/initTransactions';
 import {ListPage} from '../../../types/listTypes';
 
 interface RemoveListProps {

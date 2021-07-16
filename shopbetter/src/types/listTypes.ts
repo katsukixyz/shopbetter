@@ -1,7 +1,7 @@
 export type ListPage = {
   id?: number;
   name: string;
-  items: string;
+  items: ListItem[];
 };
 
 export type ListItem = {

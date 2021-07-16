@@ -1,7 +1,27 @@
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {ListPage} from '../types/listTypes';
 
-const addList = (db: SQLiteDatabase, values: ListPage) => {
+const getListData = (db: SQLiteDatabase) => {
+  return new Promise<ListPage[]>(resolve => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM shopping', [], (tx, result) => {
+        const parsedListData = result.rows
+          .raw()
+          // .map(e => (e.items = JSON.parse(e.items)));
+          .map(e => ({
+            ...e,
+            items: JSON.parse(e.items),
+          }));
+        resolve(parsedListData);
+      });
+    });
+  });
+};
+
+const addList = (
+  db: SQLiteDatabase,
+  values: Omit<ListPage, 'items'> & {items: string},
+) => {
   return new Promise(resolve => {
     const maxQuery = 'SELECT MAX(id) FROM shopping';
     const addQuery = `INSERT INTO shopping (id, name, items) VALUES (?,?,?)`;
@@ -83,4 +103,4 @@ const updateListItem = (db: SQLiteDatabase, id: number, items: string) => {
   });
 };
 
-export {addList, removeList, editListName, updateListItem};
+export {getListData, addList, removeList, editListName, updateListItem};

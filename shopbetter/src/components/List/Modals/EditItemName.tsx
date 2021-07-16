@@ -38,21 +38,21 @@ const EditItemName: React.FC<EditItemNameProps> = ({
   const [nameInput, setNameInput] = useState('');
 
   useEffect(() => {
-    if (currentList) {
-      if (JSON.parse(currentList.items).length > 0) {
-        setNameInput(JSON.parse(currentList.items)[listIndex].name);
+    if (currentList.items) {
+      if (currentList.items.length > 0) {
+        setNameInput(currentList.items[listIndex].name);
       }
     }
-  }, [shoppingData, currentList, pageIndex, listIndex]);
+  }, [currentList, listIndex]);
 
   const onConfirm = () => {
-    const currentItems = JSON.parse(currentList.items);
-    if (nameInput !== currentItems[listIndex]) {
+    const currentItems = currentList.items;
+    if (nameInput !== currentItems[listIndex].name) {
       const updatedItems = [...currentItems];
       updatedItems[listIndex].name = nameInput;
 
       const updatedShoppingData = [...shoppingData];
-      updatedShoppingData[pageIndex].items = JSON.stringify(updatedItems);
+      updatedShoppingData[pageIndex].items = updatedItems;
       setShoppingData(updatedShoppingData);
 
       updateListItem(db, currentList.id!, JSON.stringify(updatedItems));

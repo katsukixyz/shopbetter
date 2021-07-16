@@ -12,7 +12,8 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 interface ListCardItemProps {
   db: SQLiteDatabase;
   pageIndex: number;
-  items: string;
+  itemRefs: Map<any, any>;
+  items: ListItem[];
   shoppingData: ListPage[];
   setShoppingData: React.Dispatch<SetStateAction<ListPage[]>>;
   setEditItemNameModalVis: React.Dispatch<
@@ -24,6 +25,7 @@ interface ListCardItemProps {
 }
 
 const ListCardItem = ({
+  itemRefs,
   items,
   shoppingData,
   db,
@@ -32,8 +34,6 @@ const ListCardItem = ({
   setEditItemNameModalVis,
   setRemoveItemModalVis,
 }: ListCardItemProps) => {
-  const itemRefs = new Map();
-
   const renderRightActions = (
     progress: Animated.AnimatedInterpolation,
     _dragAnimatedValue: Animated.AnimatedInterpolation,
@@ -90,6 +90,7 @@ const ListCardItem = ({
     ({item, index, drag}: RenderItemParams<ListItem>) => {
       return (
         <Swipeable
+          key={index}
           ref={ref => {
             if (ref && !itemRefs.get(index)) {
               itemRefs.set(index, ref);
@@ -127,7 +128,7 @@ const ListCardItem = ({
                 lineWidth={1.5}
                 value={item.checkVal}
                 onValueChange={newValue => {
-                  const changedItems = [...JSON.parse(items)];
+                  const changedItems = [...items];
                   changedItems[index!] = {
                     checkVal: newValue,
                     name: item.name,
@@ -135,7 +136,7 @@ const ListCardItem = ({
                   const changedShoppingData = [...shoppingData];
                   changedShoppingData[pageIndex] = {
                     ...shoppingData[pageIndex],
-                    items: JSON.stringify(changedItems),
+                    items: changedItems,
                   };
                   setShoppingData(changedShoppingData);
                   updateListItem(
