@@ -30,8 +30,9 @@ const Compare: React.FC<CompareProps> = ({
   comparisonData,
   setComparisonData,
 }) => {
-  const [filteredComparisonData, setFilteredComparisonData] =
-    useState<Comparison[]>(comparisonData);
+  const [filteredComparisonData, setFilteredComparisonData] = useState<
+    Comparison[]
+  >([]);
 
   const [filterModalVis, setFilterModalVis] = useState(false);
 

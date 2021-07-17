@@ -2,7 +2,7 @@ import React, {SetStateAction} from 'react';
 import {Text} from 'react-native';
 import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
-import {removeComparison} from '../../../services/compare';
+import {removeComparison, getComparisonData} from '../../../services/compare';
 import {Comparison} from '../../../types/compareTypes';
 
 interface RemoveComparisonProps {
@@ -26,10 +26,14 @@ const RemoveComparison: React.FC<RemoveComparisonProps> = ({
 }) => {
   const currentComparison = comparisonData[index];
   const onConfirm = () => {
-    const updatedComparisonData = [...comparisonData];
-    updatedComparisonData.splice(index, 1);
-    setComparisonData(updatedComparisonData);
-    removeComparison(db, currentComparison.id!);
+    // const updatedComparisonData = [...comparisonData];
+    // updatedComparisonData.splice(index, 1);
+    // setComparisonData(updatedComparisonData);
+    removeComparison(db, currentComparison.id!).then(() => {
+      getComparisonData(db).then(data => {
+        setComparisonData(data);
+      });
+    });
     setRemoveComparisonModalVis({index: index, visible: false});
   };
 

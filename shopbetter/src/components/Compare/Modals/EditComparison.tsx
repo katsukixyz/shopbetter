@@ -4,7 +4,7 @@ import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
 import {editListName} from '../../../services/list';
 import {Comparison} from '../../../types/compareTypes';
-import {updateComparison} from '../../../services/compare';
+import {updateComparison, getComparisonData} from '../../../services/compare';
 import {closeItemRefs} from '../../List/Card/ListCard';
 
 interface EditComparisonProps {
@@ -63,15 +63,18 @@ const EditComparison: React.FC<EditComparisonProps> = ({
           price: price,
           quantity: quantity,
         }).then(() => {
-          const updatedComparisonItem = {
-            ...comparisonItem,
-            name: nameInput,
-            price: price,
-            quantity: quantity,
-          };
-          const updatedComparisonData = [...comparisonData];
-          updatedComparisonData[index] = updatedComparisonItem;
-          setComparisonData(updatedComparisonData);
+          // const updatedComparisonItem = {
+          //   ...comparisonItem,
+          //   name: nameInput,
+          //   price: price,
+          //   quantity: quantity,
+          // };
+          // const updatedComparisonData = [...comparisonData];
+          // updatedComparisonData[index] = updatedComparisonItem;
+          // setComparisonData(updatedComparisonData);
+          getComparisonData(db).then(data => {
+            setComparisonData(data);
+          });
         });
       }
       closeItemRefs(itemRefs);
