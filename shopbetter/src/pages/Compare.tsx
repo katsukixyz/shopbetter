@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {View, Text, FlatList, Modal} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Picker} from '@react-native-picker/picker';
 import AddButton from '../components/Compare/AddButton/AddButton';
-import Filter from '../components/Compare/Filter/Filter';
+import FilterButton from '../components/Compare/FilterButton/FilterButton';
 import SQLite, {
   openDatabase,
   SQLiteDatabase,
@@ -17,6 +17,7 @@ import CompareCard from '../components/Compare/CompareCard/CompareCard';
 import EditComparison from '../components/Compare/Modals/EditComparison';
 import RemoveComparison from '../components/Compare/Modals/RemoveComparison';
 import StorePicker from '../components/Compare/Modals/StorePicker';
+import Filter from '../components/Compare/Modals/Filter';
 
 interface CompareProps {
   comparisonDB: SQLiteDatabase;
@@ -29,6 +30,11 @@ const Compare: React.FC<CompareProps> = ({
   comparisonData,
   setComparisonData,
 }) => {
+  const [filteredComparisonData, setFilteredComparisonData] =
+    useState<Comparison[]>(comparisonData);
+
+  const [filterModalVis, setFilterModalVis] = useState(false);
+
   const [addComparisonModalVis, setAddComparisonModalVis] = useState(false);
   const [editComparisonModalVis, setEditComparisonModalVis] = useState({
     index: 0,
@@ -45,6 +51,14 @@ const Compare: React.FC<CompareProps> = ({
   });
 
   const itemRefs = new Map();
+
+  const allStores = useMemo(() => {
+    return comparisonData
+      .filter(({store}) => store !== 'All')
+      .reduce((acc, {store}) => {
+        return acc.add(store);
+      }, new Set<string>());
+  }, [comparisonData]);
 
   const renderItem = ({item, index}: {item: Comparison; index: number}) => (
     <CompareCard
@@ -66,14 +80,21 @@ const Compare: React.FC<CompareProps> = ({
         paddingTop: 10,
       }}>
       <PageHeader>Compare</PageHeader>
-      <Filter />
+      <FilterButton setFilterModalVis={setFilterModalVis} itemRefs={itemRefs} />
       <FlatList
         contentContainerStyle={{paddingBottom: 50}}
-        data={comparisonData}
+        data={filteredComparisonData}
         renderItem={renderItem}
         keyExtractor={item => item.name}
       />
       <AddButton setAddComparisonModalVis={setAddComparisonModalVis} />
+      <Filter
+        comparisonData={comparisonData}
+        allStores={allStores}
+        filterModalVis={filterModalVis}
+        setFilterModalVis={setFilterModalVis}
+        setFilteredComparisonData={setFilteredComparisonData}
+      />
       <AddComparison
         db={comparisonDB}
         setComparisonData={setComparisonData}
@@ -82,7 +103,8 @@ const Compare: React.FC<CompareProps> = ({
       />
       <EditComparison
         db={comparisonDB}
-        comparisonData={comparisonData}
+        // comparisonData={comparisonData}
+        comparisonData={filteredComparisonData}
         setComparisonData={setComparisonData}
         editComparisonModalVis={editComparisonModalVis.visible}
         itemRefs={itemRefs}
@@ -91,7 +113,8 @@ const Compare: React.FC<CompareProps> = ({
       />
       <RemoveComparison
         db={comparisonDB}
-        comparisonData={comparisonData}
+        // comparisonData={comparisonData}
+        comparisonData={filteredComparisonData}
         setComparisonData={setComparisonData}
         index={removeComparisonModalVis.index}
         removeComparisonModalVis={removeComparisonModalVis.visible}
@@ -99,8 +122,10 @@ const Compare: React.FC<CompareProps> = ({
       />
       <StorePicker
         db={comparisonDB}
-        comparisonData={comparisonData}
+        // comparisonData={comparisonData}
+        comparisonData={filteredComparisonData}
         setComparisonData={setComparisonData}
+        allStores={allStores}
         index={storePickerModalVis.index}
         storePickerModalVis={storePickerModalVis.visible}
         setStorePickerModalVis={setStorePickerModalVis}

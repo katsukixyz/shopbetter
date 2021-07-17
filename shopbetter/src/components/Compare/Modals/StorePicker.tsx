@@ -11,6 +11,7 @@ interface StorePickerProps {
   db: SQLiteDatabase;
   comparisonData: Comparison[];
   setComparisonData: React.Dispatch<React.SetStateAction<Comparison[]>>;
+  allStores: Set<string>;
   index: number;
   storePickerModalVis: boolean;
   setStorePickerModalVis: React.Dispatch<
@@ -22,6 +23,7 @@ const StorePicker: React.FC<StorePickerProps> = ({
   db,
   comparisonData,
   setComparisonData,
+  allStores,
   index,
   storePickerModalVis,
   setStorePickerModalVis,
@@ -30,19 +32,6 @@ const StorePicker: React.FC<StorePickerProps> = ({
   const [nameInput, setNameInput] = useState('');
 
   const currentComparison = comparisonData[index];
-
-  const allStores = useMemo(() => {
-    const dbStores = comparisonData
-      .filter(({store}) => store !== 'All')
-      .reduce((acc, {store}) => {
-        return acc.add(store);
-      }, new Set<string>());
-
-    const copiedDBStores = [...dbStores];
-    copiedDBStores.unshift('All');
-    copiedDBStores.push('+ Other store');
-    return copiedDBStores;
-  }, [comparisonData]);
 
   useEffect(() => {
     if (currentComparison) {
@@ -61,7 +50,10 @@ const StorePicker: React.FC<StorePickerProps> = ({
         ...currentComparison,
         store: pickerInput,
       });
-    } else {
+      setComparisonData(updatedComparisonData);
+      setStorePickerModalVis({visible: false, index: index});
+      setNameInput('');
+    } else if (nameInput) {
       updatedComparisonData[index] = {
         ...currentComparison,
         store: nameInput,
@@ -70,12 +62,15 @@ const StorePicker: React.FC<StorePickerProps> = ({
         ...currentComparison,
         store: nameInput,
       });
+      setComparisonData(updatedComparisonData);
+      setStorePickerModalVis({visible: false, index: index});
+      setNameInput('');
     }
-    setComparisonData(updatedComparisonData);
-    setStorePickerModalVis({visible: false, index: index});
   };
   const onCancel = () => {
     setStorePickerModalVis({visible: false, index: index});
+    setNameInput('');
+    setPickerInput(currentComparison.store);
   };
 
   return (
@@ -93,7 +88,7 @@ const StorePicker: React.FC<StorePickerProps> = ({
         itemStyle={{height: 120}}
         selectedValue={pickerInput}
         onValueChange={itemValue => setPickerInput(itemValue)}>
-        {[...allStores].map((storeName, i) => (
+        {['All', ...allStores, '+ Other store'].map((storeName, i) => (
           <Picker.Item key={i} label={storeName} value={storeName} />
         ))}
       </Picker>

@@ -78,12 +78,12 @@ const addComparison = (db: SQLiteDatabase, values: Comparison) => {
 const updateComparison = (db: SQLiteDatabase, values: Comparison) => {
   return new Promise<any>(resolve => {
     const query =
-      'UPDATE comparison SET name = ?, price = ?, quantity = ? WHERE id = ?';
+      'UPDATE comparison SET store = ?, name = ?, price = ?, quantity = ? WHERE id = ?';
     db.transaction(
       tx => {
         tx.executeSql(
           query,
-          [values.name, values.price, values.quantity, values.id],
+          [values.store, values.name, values.price, values.quantity, values.id],
           (tx, result) => {
             resolve();
           },

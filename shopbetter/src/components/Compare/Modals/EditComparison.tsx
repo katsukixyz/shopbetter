@@ -36,6 +36,7 @@ const EditComparison: React.FC<EditComparisonProps> = ({
   const [quantityInput, setQuantityInput] = useState('');
 
   const comparisonItem = comparisonData[index];
+
   useEffect(() => {
     if (comparisonItem) {
       setNameInput(comparisonItem.name);
