@@ -124,7 +124,9 @@ const ListCardItem = ({
               <CheckBox
                 boxType="square"
                 style={{height: 16, marginLeft: 5}}
-                animationDuration={0.05}
+                animationDuration={0.000000000001}
+                onAnimationType="fade"
+                offAnimationType="fade"
                 lineWidth={1.5}
                 value={item.checkVal}
                 onValueChange={newValue => {
