@@ -24,20 +24,22 @@ const AddComparison: React.FC<AddComparisonProps> = ({
 
   const onConfirm = () => {
     try {
-      addComparison(db, {
-        name: nameInput,
-        store: 'All',
-        price: parseFloat(priceInput),
-        quantity: parseFloat(quantityInput),
-      }).then(() => {
-        getComparisonData(db).then((data: Comparison[]) => {
-          setComparisonData(data);
-          setAddComparisonModalVis(false);
-          setNameInput('');
-          setPriceInput('');
-          setQuantityInput('');
+      if (priceInput && quantityInput) {
+        addComparison(db, {
+          name: nameInput,
+          store: 'All',
+          price: parseFloat(priceInput),
+          quantity: parseFloat(quantityInput),
+        }).then(() => {
+          getComparisonData(db).then((data: Comparison[]) => {
+            setComparisonData(data);
+            setAddComparisonModalVis(false);
+            setNameInput('');
+            setPriceInput('');
+            setQuantityInput('');
+          });
         });
-      });
+      }
     } catch (e) {
       console.log('err', e);
     }
