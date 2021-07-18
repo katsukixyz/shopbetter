@@ -51,10 +51,17 @@ const Filter: React.FC<FilterProps> = ({
   const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
-    setFilteredComparisonData(
-      filterValues(comparisonData, pickerInput, searchInput),
-    );
-  }, [comparisonData]);
+    if ([...allStores].includes(pickerInput)) {
+      //normal picking function
+      setFilteredComparisonData(
+        filterValues(comparisonData, pickerInput, searchInput),
+      );
+    } else {
+      //when filtered list is modified (ex. changing comparison store while filtered), reset to All
+      setFilteredComparisonData(comparisonData);
+      setPickerInput('All');
+    }
+  }, [comparisonData, allStores]);
 
   const onConfirm = () => {
     setFilteredComparisonData(

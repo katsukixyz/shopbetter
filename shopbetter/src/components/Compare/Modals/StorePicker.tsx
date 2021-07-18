@@ -5,7 +5,7 @@ import AlertModal from '../../AlertModal/AlertModal';
 import {Comparison} from '../../../types/compareTypes';
 import {Picker} from '@react-native-picker/picker';
 import {TextInput} from 'react-native-gesture-handler';
-import {updateComparison} from '../../../services/compare';
+import {updateComparison, getComparisonData} from '../../../services/compare';
 
 interface StorePickerProps {
   db: SQLiteDatabase;
@@ -40,29 +40,39 @@ const StorePicker: React.FC<StorePickerProps> = ({
   }, [currentComparison]);
 
   const onConfirm = () => {
-    const updatedComparisonData = [...comparisonData];
+    // const updatedComparisonData = [...comparisonData];
     if (pickerInput !== '+ Other store') {
-      updatedComparisonData[index] = {
-        ...currentComparison,
-        store: pickerInput,
-      };
+      //   updatedComparisonData[index] = {
+      //     ...currentComparison,
+      //     store: pickerInput,
+      //   };
       updateComparison(db, {
         ...currentComparison,
         store: pickerInput,
+      }).then(() => {
+        getComparisonData(db).then(data => {
+          console.log(data);
+          setComparisonData(data);
+        });
       });
-      setComparisonData(updatedComparisonData);
+      //   setComparisonData(updatedComparisonData);
       setStorePickerModalVis({visible: false, index: index});
       setNameInput('');
     } else if (nameInput) {
-      updatedComparisonData[index] = {
-        ...currentComparison,
-        store: nameInput,
-      };
+      //   updatedComparisonData[index] = {
+      //     ...currentComparison,
+      //     store: nameInput,
+      //   };
       updateComparison(db, {
         ...currentComparison,
         store: nameInput,
+      }).then(() => {
+        getComparisonData(db).then(data => {
+          console.log(data);
+          setComparisonData(data);
+        });
       });
-      setComparisonData(updatedComparisonData);
+      //   setComparisonData(updatedComparisonData);
       setStorePickerModalVis({visible: false, index: index});
       setNameInput('');
     }
