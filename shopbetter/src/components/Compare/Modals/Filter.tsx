@@ -1,6 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import AlertModal from '../../AlertModal/AlertModal';
 import {Comparison} from '../../../types/compareTypes';
 import {Picker} from '@react-native-picker/picker';

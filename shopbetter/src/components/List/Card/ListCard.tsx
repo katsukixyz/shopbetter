@@ -20,6 +20,7 @@ import RemoveList from '../Modals/RemoveList';
 import ListCardItem from './ListCardItem';
 import EditItemName from '../Modals/EditItemName';
 import RemoveListItem from '../Modals/RemoveListItem';
+import ClearList from '../Modals/ClearList';
 
 interface ListCardProps extends ListPage {
   db: SQLiteDatabase;
@@ -45,6 +46,7 @@ const ListCard: React.FC<ListCardProps> = ({
   setShoppingData,
 }) => {
   const [removeListModalVis, setRemoveListModalVis] = useState(false);
+  const [clearListModalVis, setClearListModalVis] = useState(false);
   const [editListNameModalVis, setEditListNameModalVis] = useState(false);
   const [addItemModalVis, setAddItemModalVis] = useState(false);
   const [editItemNameModalVis, setEditItemNameModalVis] = useState<{
@@ -85,23 +87,31 @@ const ListCard: React.FC<ListCardProps> = ({
           paddingBottom: 8,
         }}>
         <TouchableOpacity
-          style={{
-            backgroundColor: '#f8f4f4',
-            padding: 5,
-            borderRadius: 6,
-          }}
+          style={[
+            name ? {maxHeight: 43.7} : {height: 43.7},
+            {
+              backgroundColor: '#f8f4f4',
+              padding: 5,
+              borderRadius: 6,
+              maxWidth: 220,
+            },
+          ]}
           onPress={() => setEditListNameModalVis(true)}>
           <Text
+            adjustsFontSizeToFit
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            minimumFontScale={0.01}
             style={{
               fontWeight: '500',
               fontSize: 28,
-              maxWidth: 260,
             }}>
             {name}
           </Text>
         </TouchableOpacity>
         <Buttons
           setAddItemModalVis={setAddItemModalVis}
+          setClearListModalVis={setClearListModalVis}
           setRemoveListModalVis={setRemoveListModalVis}
         />
       </View>
@@ -184,6 +194,14 @@ const ListCard: React.FC<ListCardProps> = ({
         setShoppingData={setShoppingData}
         removeListModalVis={removeListModalVis}
         setRemoveListModalVis={setRemoveListModalVis}
+      />
+      <ClearList
+        db={db}
+        shoppingData={shoppingData}
+        pageIndex={pageIndex}
+        setShoppingData={setShoppingData}
+        clearListModalVis={clearListModalVis}
+        setClearListModalVis={setClearListModalVis}
       />
     </View>
   );

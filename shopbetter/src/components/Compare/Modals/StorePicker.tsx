@@ -51,7 +51,6 @@ const StorePicker: React.FC<StorePickerProps> = ({
         store: pickerInput,
       }).then(() => {
         getComparisonData(db).then(data => {
-          console.log(data);
           setComparisonData(data);
         });
       });
@@ -68,7 +67,6 @@ const StorePicker: React.FC<StorePickerProps> = ({
         store: nameInput,
       }).then(() => {
         getComparisonData(db).then(data => {
-          console.log(data);
           setComparisonData(data);
         });
       });
