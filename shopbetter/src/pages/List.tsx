@@ -9,6 +9,7 @@ import AddList from '../components/List/Modals/AddList';
 import {ListPage} from '../types/listTypes';
 import {FlatList} from 'react-native-gesture-handler';
 import {ScalingDot} from 'react-native-animated-pagination-dots';
+import LimitReached from '../components/List/Modals/LimitReached';
 
 interface ListProps {
   shoppingDB: SQLiteDatabase;
@@ -22,6 +23,8 @@ const List: React.FC<ListProps> = ({
   setShoppingData,
 }) => {
   const [addListModalVis, setAddListModalVis] = useState(false);
+  const [limitReachedModalVis, setLimitReachedModalVis] = useState(false);
+
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const memoizedRenderItem = useCallback(() => renderItem, [shoppingData]);
@@ -85,8 +88,16 @@ const List: React.FC<ListProps> = ({
         addListModalVis={addListModalVis}
         setAddListModalVis={setAddListModalVis}
       />
+      <LimitReached
+        limitReachedModalVis={limitReachedModalVis}
+        setLimitReachedModalVis={setLimitReachedModalVis}
+      />
 
-      <ComposeButton setAddListModalVis={setAddListModalVis} />
+      <ComposeButton
+        length={shoppingData.length}
+        setLimitReachedModalVis={setLimitReachedModalVis}
+        setAddListModalVis={setAddListModalVis}
+      />
     </SafeAreaView>
   );
 };

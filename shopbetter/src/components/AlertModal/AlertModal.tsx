@@ -12,7 +12,8 @@ interface AlertModalProps {
   };
   title: string;
   modalVis: boolean;
-  onConfirm: () => void;
+  oneButton?: boolean;
+  onConfirm?: () => void;
   onCancel: () => void;
   children: React.ReactNode;
 }
@@ -21,6 +22,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
   style,
   title,
   modalVis,
+  oneButton,
   onConfirm,
   onCancel,
   children,
@@ -51,45 +53,63 @@ const AlertModal: React.FC<AlertModalProps> = ({
           <View style={{paddingBottom: 20}}>{children}</View>
 
           <Separator style={{paddingBottom: 20, borderTopColor: '#d3d3d3'}} />
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity onPress={onCancel}>
-              <Text
+          {oneButton ? (
+            <View>
+              <TouchableOpacity
+                onPress={onCancel}
                 style={{
-                  color: '#0a84ff',
-                  fontSize: 16,
-                  fontWeight: '400',
-                  padding: 10,
-                }}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onConfirm}>
-              <View
-                style={{
-                  padding: 8,
                   backgroundColor: '#0a84ff',
+                  justifyContent: 'center',
+                  padding: 10,
                   alignItems: 'center',
-                  width: 120,
                   borderRadius: 6,
                 }}>
+                <Text style={{color: 'white', fontSize: 16, fontWeight: '400'}}>
+                  Dismiss
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity onPress={onCancel}>
                 <Text
                   style={{
-                    color: 'white',
+                    color: '#0a84ff',
                     fontSize: 16,
                     fontWeight: '400',
-                    //   padding: 3,
+                    padding: 10,
                   }}>
-                  Confirm
+                  Cancel
                 </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onConfirm}>
+                <View
+                  style={{
+                    padding: 8,
+                    backgroundColor: '#0a84ff',
+                    alignItems: 'center',
+                    width: 120,
+                    borderRadius: 6,
+                  }}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 16,
+                      fontWeight: '400',
+                      //   padding: 3,
+                    }}>
+                    Confirm
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </Modal>
     </View>

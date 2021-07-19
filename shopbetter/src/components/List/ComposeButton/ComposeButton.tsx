@@ -3,13 +3,25 @@ import {TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface ComposeButton {
+  length: number;
+  setLimitReachedModalVis: React.Dispatch<React.SetStateAction<boolean>>;
   setAddListModalVis: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ComposeButton: React.FC<ComposeButton> = ({setAddListModalVis}) => {
+const ComposeButton: React.FC<ComposeButton> = ({
+  length,
+  setLimitReachedModalVis,
+  setAddListModalVis,
+}) => {
   return (
     <TouchableOpacity
-      onPress={() => setAddListModalVis(true)}
+      onPress={() => {
+        if (length === 10) {
+          setLimitReachedModalVis(true);
+        } else {
+          setAddListModalVis(true);
+        }
+      }}
       style={{
         width: 60,
         height: 60,
