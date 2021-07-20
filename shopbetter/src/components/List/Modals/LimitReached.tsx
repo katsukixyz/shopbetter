@@ -17,9 +17,6 @@ const LimitReached: React.FC<LimitReachedProps> = ({
 
   return (
     <AlertModal
-      style={{
-        marginBottom: 320,
-      }}
       title="Error"
       oneButton
       modalVis={limitReachedModalVis}

@@ -57,9 +57,6 @@ const RemoveListItem: React.FC<RemoveItemProps> = ({
 
   return (
     <AlertModal
-      style={{
-        marginBottom: 320,
-      }}
       title="Remove item"
       modalVis={removeItemModalVis}
       onConfirm={() => onConfirm()}

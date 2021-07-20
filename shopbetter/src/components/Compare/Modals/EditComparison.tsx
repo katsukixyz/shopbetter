@@ -98,11 +98,7 @@ const EditComparison: React.FC<EditComparisonProps> = ({
       title="Edit item"
       modalVis={editComparisonModalVis}
       onConfirm={onConfirm}
-      onCancel={onCancel}
-      style={{
-        marginTop: 190,
-        marginBottom: 295,
-      }}>
+      onCancel={onCancel}>
       <TextInput
         placeholder="Item name"
         placeholderTextColor="#909090"

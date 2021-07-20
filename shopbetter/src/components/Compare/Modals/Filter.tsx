@@ -73,7 +73,6 @@ const Filter: React.FC<FilterProps> = ({
 
   return (
     <AlertModal
-      style={{marginTop: 180, marginBottom: 290}}
       title="Filter items"
       modalVis={filterModalVis}
       onConfirm={onConfirm}

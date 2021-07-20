@@ -37,9 +37,6 @@ const RemoveList: React.FC<RemoveListProps> = ({
 
   return (
     <AlertModal
-      style={{
-        marginBottom: 320,
-      }}
       title="Remove list"
       modalVis={removeListModalVis}
       onConfirm={() => onConfirm()}

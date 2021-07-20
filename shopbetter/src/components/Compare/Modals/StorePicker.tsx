@@ -83,10 +83,6 @@ const StorePicker: React.FC<StorePickerProps> = ({
 
   return (
     <AlertModal
-      style={{
-        marginTop: 180,
-        marginBottom: pickerInput === '+ Other store' ? 290 : 330,
-      }}
       title="Change store"
       modalVis={storePickerModalVis}
       onConfirm={onConfirm}

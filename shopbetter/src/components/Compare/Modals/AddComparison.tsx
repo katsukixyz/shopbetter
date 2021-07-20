@@ -57,13 +57,7 @@ const AddComparison: React.FC<AddComparisonProps> = ({
       title="Add item"
       modalVis={addComparisonModalVis}
       onConfirm={() => onConfirm()}
-      onCancel={() => onCancel()}
-      style={
-        {
-          // marginTop: 190,
-          // marginBottom: 295,
-        }
-      }>
+      onCancel={() => onCancel()}>
       <TextInput
         placeholder="Item name"
         placeholderTextColor="#909090"

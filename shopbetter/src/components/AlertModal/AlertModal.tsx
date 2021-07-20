@@ -1,15 +1,10 @@
-import React, {useState, ReactPropTypes} from 'react';
-import {View, Text, TextInput} from 'react-native';
+import React from 'react';
+import {View, Text} from 'react-native';
 import Modal from 'react-native-modal';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {SQLiteDatabase} from 'react-native-sqlite-storage';
-import {addList} from '../../services/list';
 import Separator from '../List/Separator/Separator';
 
 interface AlertModalProps {
-  style?: {
-    [key: string]: string | number;
-  };
   title: string;
   modalVis: boolean;
   oneButton?: boolean;
@@ -19,7 +14,6 @@ interface AlertModalProps {
 }
 
 const AlertModal: React.FC<AlertModalProps> = ({
-  style,
   title,
   modalVis,
   oneButton,

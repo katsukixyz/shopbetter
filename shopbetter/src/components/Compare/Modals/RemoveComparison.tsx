@@ -46,9 +46,6 @@ const RemoveComparison: React.FC<RemoveComparisonProps> = ({
 
   return (
     <AlertModal
-      style={{
-        marginBottom: 320,
-      }}
       title="Remove item"
       modalVis={removeComparisonModalVis}
       onConfirm={() => onConfirm()}

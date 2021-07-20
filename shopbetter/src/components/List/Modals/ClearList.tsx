@@ -38,9 +38,6 @@ const ClearList: React.FC<ClearListProps> = ({
 
   return (
     <AlertModal
-      style={{
-        marginBottom: 320,
-      }}
       title="Clear list"
       modalVis={clearListModalVis}
       onConfirm={() => onConfirm()}
