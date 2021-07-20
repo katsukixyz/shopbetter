@@ -78,15 +78,26 @@ const Compare: React.FC<CompareProps> = ({
         flex: 1,
         paddingLeft: 20,
         paddingRight: 20,
-        paddingTop: 10,
+        paddingTop: 20,
       }}>
-      <PageHeader>Compare</PageHeader>
-      <FilterButton setFilterModalVis={setFilterModalVis} itemRefs={itemRefs} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        <PageHeader>Compare</PageHeader>
+        <FilterButton
+          setFilterModalVis={setFilterModalVis}
+          itemRefs={itemRefs}
+        />
+      </View>
       <FlatList
         contentContainerStyle={{paddingBottom: 50}}
         data={filteredComparisonData}
         renderItem={renderItem}
-        keyExtractor={item => item.name}
+        keyExtractor={(item, i) => i.toString()}
       />
       <AddButton setAddComparisonModalVis={setAddComparisonModalVis} />
       <Filter

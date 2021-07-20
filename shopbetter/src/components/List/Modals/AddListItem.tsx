@@ -54,6 +54,7 @@ const AddListItem: React.FC<AddListItemProps> = ({
       <TextInput
         style={{backgroundColor: '#f8f4f4', padding: 14, borderRadius: 6}}
         placeholder="Item name"
+        placeholderTextColor="#909090"
         value={itemNameInput}
         onChangeText={setItemNameInput}
       />

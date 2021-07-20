@@ -23,13 +23,18 @@ const FilterButton: React.FC<FilterButtonProps> = ({
         height: 30,
         borderRadius: 15,
         backgroundColor: 'black',
-        position: 'absolute',
-        top: 64,
-        right: 20,
+        // position: 'absolute',
+        // top: 64,
+        // right: 20,
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Ionicons name="filter" color="white" size={16} />
+      <Ionicons
+        name="filter"
+        color="white"
+        size={16}
+        style={{paddingLeft: 1}}
+      />
     </TouchableOpacity>
   );
 };

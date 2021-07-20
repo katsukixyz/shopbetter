@@ -1,5 +1,5 @@
 import React, {useState, useRef, useCallback} from 'react';
-import {View, Animated} from 'react-native';
+import {View, Animated, useWindowDimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
 import ListCard from '../components/List/Card/ListCard';
@@ -22,6 +22,7 @@ const List: React.FC<ListProps> = ({
   shoppingData,
   setShoppingData,
 }) => {
+  const {width} = useWindowDimensions();
   const [addListModalVis, setAddListModalVis] = useState(false);
   const [limitReachedModalVis, setLimitReachedModalVis] = useState(false);
 
@@ -32,6 +33,7 @@ const List: React.FC<ListProps> = ({
   const renderItem = ({item, index}: {item: ListPage; index: number}) => (
     <ListCard
       key={item.id}
+      style={{width: width - 40}}
       pageIndex={index}
       name={item.name}
       items={item.items}
@@ -47,14 +49,14 @@ const List: React.FC<ListProps> = ({
         flex: 1,
         // paddingLeft: 10,
         // paddingRight: 10,
-        paddingTop: 10,
+        paddingTop: 20,
       }}>
-      <PageHeader style={{paddingLeft: 20}}>Lists</PageHeader>
+      <PageHeader style={{paddingLeft: 20, marginBottom: 10}}>Lists</PageHeader>
       {shoppingData ? (
         shoppingData.length > 0 ? (
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, marginBottom: 10}}>
             <FlatList
-              style={{width: 390}}
+              style={{width: width}}
               horizontal
               showsHorizontalScrollIndicator={false}
               data={shoppingData}
@@ -74,6 +76,7 @@ const List: React.FC<ListProps> = ({
               inActiveDotOpacity={0.2}
               data={shoppingData}
               scrollX={scrollX}
+              // containerStyle={{paddingBottom: 30}}
             />
           </View>
         ) : (

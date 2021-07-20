@@ -48,6 +48,7 @@ const AddList: React.FC<AddListProps> = ({
       onCancel={() => onCancel()}>
       <TextInput
         placeholder="New list name"
+        placeholderTextColor="#909090"
         style={{backgroundColor: '#f8f4f4', padding: 14, borderRadius: 6}}
         onChangeText={setNameInput}
         value={nameInput}

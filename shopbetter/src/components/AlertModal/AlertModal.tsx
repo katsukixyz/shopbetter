@@ -33,19 +33,18 @@ const AlertModal: React.FC<AlertModalProps> = ({
         isVisible={modalVis}
         animationIn={'fadeIn'}
         animationOut={'fadeOut'}
-        animationInTiming={100}
-        animationOutTiming={100}>
+        backdropTransitionOutTiming={0}
+        avoidKeyboard
+        animationInTiming={200}
+        animationOutTiming={200}>
         <View
           style={{
-            flex: 1,
+            flex: 0,
             padding: 20,
             backgroundColor: 'white',
-            marginTop: 290,
             marginRight: 50,
             marginLeft: 50,
-            marginBottom: 310,
             borderRadius: 12,
-            ...style,
           }}>
           <Text style={{fontSize: 24, fontWeight: '600', paddingBottom: 10}}>
             {title}
@@ -72,7 +71,6 @@ const AlertModal: React.FC<AlertModalProps> = ({
           ) : (
             <View
               style={{
-                flex: 1,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',

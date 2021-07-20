@@ -100,11 +100,12 @@ const EditComparison: React.FC<EditComparisonProps> = ({
       onConfirm={onConfirm}
       onCancel={onCancel}
       style={{
-        marginTop: 230,
-        marginBottom: 255,
+        marginTop: 190,
+        marginBottom: 295,
       }}>
       <TextInput
         placeholder="Item name"
+        placeholderTextColor="#909090"
         style={{
           backgroundColor: '#f8f4f4',
           padding: 14,
@@ -117,6 +118,7 @@ const EditComparison: React.FC<EditComparisonProps> = ({
       <TextInput
         contextMenuHidden={true}
         placeholder="Price"
+        placeholderTextColor="#909090"
         keyboardType="numeric"
         style={{
           backgroundColor: '#f8f4f4',
@@ -130,6 +132,7 @@ const EditComparison: React.FC<EditComparisonProps> = ({
       <TextInput
         contextMenuHidden={true}
         placeholder="Quantity/Weight"
+        placeholderTextColor="#909090"
         keyboardType="numeric"
         style={{backgroundColor: '#f8f4f4', padding: 14, borderRadius: 6}}
         onChangeText={setQuantityInput}

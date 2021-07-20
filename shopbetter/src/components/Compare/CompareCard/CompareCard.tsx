@@ -153,7 +153,9 @@ const CompareCard: React.FC<CompareCardProps> = ({
               onPress={() =>
                 setStorePickerModalVis({index: index, visible: true})
               }>
-              <Text>{item.store}</Text>
+              <Text ellipsizeMode="tail" numberOfLines={1}>
+                {item.store}
+              </Text>
             </RectButton>
           </View>
         </View>

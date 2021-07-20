@@ -84,8 +84,8 @@ const StorePicker: React.FC<StorePickerProps> = ({
   return (
     <AlertModal
       style={{
-        marginTop: 220,
-        marginBottom: pickerInput === '+ Other store' ? 250 : 290,
+        marginTop: 180,
+        marginBottom: pickerInput === '+ Other store' ? 290 : 330,
       }}
       title="Change store"
       modalVis={storePickerModalVis}
@@ -103,6 +103,7 @@ const StorePicker: React.FC<StorePickerProps> = ({
       {pickerInput === '+ Other store' ? (
         <TextInput
           placeholder="New store name"
+          placeholderTextColor="#909090"
           value={nameInput}
           onChangeText={setNameInput}
           style={{

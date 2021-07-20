@@ -23,6 +23,9 @@ import RemoveListItem from '../Modals/RemoveListItem';
 import ClearList from '../Modals/ClearList';
 
 interface ListCardProps extends ListPage {
+  style?: {
+    [key: string]: string | number;
+  };
   db: SQLiteDatabase;
   pageIndex: number;
   shoppingData: ListPage[];
@@ -39,6 +42,7 @@ const closeItemRefs = (itemRefs: Map<any, any>) => {
 
 const ListCard: React.FC<ListCardProps> = ({
   db,
+  style,
   name,
   items,
   pageIndex,
@@ -79,6 +83,7 @@ const ListCard: React.FC<ListCardProps> = ({
         padding: 10,
         marginLeft: 20,
         marginRight: 20,
+        ...style,
       }}>
       <View
         style={{
@@ -136,6 +141,7 @@ const ListCard: React.FC<ListCardProps> = ({
         }}
         persistentScrollbar={true}
         ItemSeparatorComponent={Separator}
+        ListFooterComponent={<View style={{paddingBottom: 30}} />}
         data={items ? items : []}
         renderItem={ListCardItem({
           itemRefs,

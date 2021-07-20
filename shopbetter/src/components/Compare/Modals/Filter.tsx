@@ -73,7 +73,7 @@ const Filter: React.FC<FilterProps> = ({
 
   return (
     <AlertModal
-      style={{marginTop: 220, marginBottom: 250}}
+      style={{marginTop: 180, marginBottom: 290}}
       title="Filter items"
       modalVis={filterModalVis}
       onConfirm={onConfirm}
@@ -89,6 +89,7 @@ const Filter: React.FC<FilterProps> = ({
       </Picker>
       <TextInput
         placeholder="Search items..."
+        placeholderTextColor="#909090"
         value={searchInput}
         onChangeText={setSearchInput}
         style={{

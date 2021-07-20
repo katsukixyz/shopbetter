@@ -56,6 +56,7 @@ const EditListName: React.FC<EditListNameProps> = ({
       <TextInput
         style={{backgroundColor: '#f8f4f4', padding: 14, borderRadius: 6}}
         placeholder="List name"
+        placeholderTextColor="#909090"
         value={nameInput}
         onChangeText={setNameInput}
       />

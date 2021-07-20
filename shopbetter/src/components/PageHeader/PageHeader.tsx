@@ -14,7 +14,6 @@ const PageHeader: React.FC<PageHeaderProps> = ({children, style}) => {
         style={{
           fontSize: 36,
           fontWeight: '700',
-          paddingBottom: 10,
         }}>
         {children}
       </Text>

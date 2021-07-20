@@ -63,7 +63,6 @@ const App = () => {
   return (
     <NavigationContainer>
       <SafeAreaProvider>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <Tab.Navigator
           tabBarOptions={{
             activeTintColor: 'black',

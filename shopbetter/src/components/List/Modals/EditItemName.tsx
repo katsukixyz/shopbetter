@@ -82,6 +82,7 @@ const EditItemName: React.FC<EditItemNameProps> = ({
       <TextInput
         style={{backgroundColor: '#f8f4f4', padding: 14, borderRadius: 6}}
         placeholder="Item name"
+        placeholderTextColor="#909090"
         value={nameInput}
         onChangeText={setNameInput}
       />
