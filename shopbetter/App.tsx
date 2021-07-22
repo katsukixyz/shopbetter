@@ -27,8 +27,9 @@ const Tab = createBottomTabNavigator();
 
 const comparisonDB = openDatabase(
   {
-    name: 'comparison_db.db',
-    location: 'Documents',
+    name: 'comparison_db',
+    location: 'default',
+    // location: 'Documents',
   },
   () => console.log('Opened comparison db.'),
   () => console.log('Error occurred.'),
@@ -36,14 +37,14 @@ const comparisonDB = openDatabase(
 
 const shoppingDB = openDatabase(
   {
-    name: 'shopping_db.db',
-    location: 'Documents',
+    name: 'shopping_db',
+    location: 'default',
+    // location: 'Documents',
   },
   () => console.log('Opened shopping db.'),
   () => console.log('Error occurred'),
 );
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
   const [comparisonData, setComparisonData] = useState<Comparison[]>([]);
   const [shoppingData, setShoppingData] = useState<ListPage[]>([]);
 
