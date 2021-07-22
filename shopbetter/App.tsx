@@ -28,8 +28,7 @@ const Tab = createBottomTabNavigator();
 const comparisonDB = openDatabase(
   {
     name: 'comparison_db',
-    location: 'default',
-    // location: 'Documents',
+    location: 'Documents',
   },
   () => console.log('Opened comparison db.'),
   () => console.log('Error occurred.'),
@@ -38,8 +37,7 @@ const comparisonDB = openDatabase(
 const shoppingDB = openDatabase(
   {
     name: 'shopping_db',
-    location: 'default',
-    // location: 'Documents',
+    location: 'Documents',
   },
   () => console.log('Opened shopping db.'),
   () => console.log('Error occurred'),
