@@ -129,6 +129,7 @@ const Compare: React.FC<CompareProps> = ({
         comparisonData={filteredComparisonData}
         setComparisonData={setComparisonData}
         index={removeComparisonModalVis.index}
+        itemRefs={itemRefs}
         removeComparisonModalVis={removeComparisonModalVis.visible}
         setRemoveComparisonModalVis={setRemoveComparisonModalVis}
       />

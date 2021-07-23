@@ -166,7 +166,12 @@ const CompareCard: React.FC<CompareCardProps> = ({
             justifyContent: 'center',
             // alignItems: 'center',
           }}>
-          <View style={{flexDirection: 'row', paddingBottom: 5}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingBottom: 5,
+            }}>
             <Ionicons
               style={{width: 30}}
               name="pricetag"
@@ -182,7 +187,12 @@ const CompareCard: React.FC<CompareCardProps> = ({
               {`$${item.price.toFixed(2)}`}
             </Text>
           </View>
-          <View style={{flexDirection: 'row', paddingBottom: 5}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingBottom: 5,
+            }}>
             <FontAwesome
               style={{width: 30}}
               name="balance-scale"
