@@ -35,7 +35,12 @@ const Buttons: React.FC<ButtonsProps> = ({
           justifyContent: 'center',
         }}
         onPress={() => setRemoveListModalVis(true)}>
-        <Ionicons name="trash-outline" color="white" size={18} />
+        <Ionicons
+          name="trash-outline"
+          color="white"
+          size={18}
+          style={{paddingLeft: 1}}
+        />
       </TouchableOpacity>
       <TouchableOpacity
         style={{

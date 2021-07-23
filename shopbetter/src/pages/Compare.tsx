@@ -1,16 +1,10 @@
-import React, {useState, useEffect, useMemo} from 'react';
-import {View, Text, FlatList, Modal} from 'react-native';
+import React, {useState, useMemo} from 'react';
+import {View, FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PageHeader from '../components/PageHeader/PageHeader';
-import {ScrollView} from 'react-native-gesture-handler';
-import {Picker} from '@react-native-picker/picker';
 import AddButton from '../components/Compare/AddButton/AddButton';
 import FilterButton from '../components/Compare/FilterButton/FilterButton';
-import SQLite, {
-  openDatabase,
-  SQLiteDatabase,
-} from 'react-native-sqlite-storage';
-import {addList} from '../services/list';
+import {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {Comparison} from '../types/compareTypes';
 import AddComparison from '../components/Compare/Modals/AddComparison';
 import CompareCard from '../components/Compare/CompareCard/CompareCard';
